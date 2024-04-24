@@ -29,6 +29,14 @@ hpki
 {--output ~/Desktop/証明書.json}
 ```
 
+* 医師会カード
+```
+hpki
+ --reader "SONY FeliCa RC-S300/P"
+ --certificate identity
+{--output ~/Desktop/証明書.json}
+```
+
 ### 認証用証明書で署名する
 
 * マイナンバーカード
@@ -59,6 +67,14 @@ FILE
 ```
 hpki
 --pin6 {6桁暗証番号}
+ --reader "SONY FeliCa RC-S300/P"
+ --certificate signature
+{--output ~/Desktop/証明書.json}
+```
+
+* 医師会カード
+```
+hpki
  --reader "SONY FeliCa RC-S300/P"
  --certificate signature
 {--output ~/Desktop/証明書.json}
