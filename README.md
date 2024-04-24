@@ -27,6 +27,8 @@ hpki
 FILE
 ```
 
+`FILE`の代わりに`stdIn`でも良い
+
 ### 署名用証明書を取得する
 
 * マイナンバーカード
@@ -49,5 +51,7 @@ hpki
 {--output ~/Desktop/署名.json}
 FILE
 ```
+
+`FILE`の代わりに`stdIn`でも良い
 
 
