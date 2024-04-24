@@ -6,7 +6,7 @@ void _sign_with_certificate_windows(Json::Value& threadCtx) {}
 void _get_my_certificate_windows(Json::Value& threadCtx) {}
 void _get_my_number_windows(Json::Value& threadCtx) {
     
-    
+    _parse_atr(threadCtx);
     
 }
 void _get_my_information_windows(Json::Value& threadCtx) {}
