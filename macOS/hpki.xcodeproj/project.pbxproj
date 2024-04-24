@@ -1,0 +1,376 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D115375A2BD8F66C000C2D3E /* hpki.m in Sources */ = {isa = PBXBuildFile; fileRef = D11537592BD8F66C000C2D3E /* hpki.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		D13B7CFC2BD8F81000344DEF /* getopt.c in Sources */ = {isa = PBXBuildFile; fileRef = D13B7CFA2BD8F81000344DEF /* getopt.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		D13B7D022BD8FD9F00344DEF /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D13B7CFF2BD8FD9F00344DEF /* libssl.a */; };
+		D13B7D032BD8FD9F00344DEF /* libjsoncpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D13B7D002BD8FD9F00344DEF /* libjsoncpp.a */; };
+		D13B7D042BD8FD9F00344DEF /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D13B7D012BD8FD9F00344DEF /* libcrypto.a */; };
+		D13B7D0A2BD8FEFD00344DEF /* apdu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D13B7D082BD8FEFD00344DEF /* apdu.cpp */; };
+		D13B7D122BD8FF9100344DEF /* My-Number-Card_macOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D13B7D0E2BD8FF9100344DEF /* My-Number-Card_macOS.cpp */; };
+		D13B7D132BD8FF9100344DEF /* My-Number-Card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D13B7D0F2BD8FF9100344DEF /* My-Number-Card.cpp */; };
+		D13B7D152BD9000700344DEF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D13B7D142BD9000700344DEF /* Security.framework */; };
+		D13B7D172BD9002200344DEF /* CryptoTokenKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D13B7D162BD9002200344DEF /* CryptoTokenKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D11537542BD8F66C000C2D3E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		D11537562BD8F66C000C2D3E /* hpki */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hpki; sourceTree = BUILT_PRODUCTS_DIR; };
+		D11537592BD8F66C000C2D3E /* hpki.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = hpki.m; sourceTree = "<group>"; };
+		D13B7CFA2BD8F81000344DEF /* getopt.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = getopt.c; path = ../getopt.c; sourceTree = "<group>"; };
+		D13B7CFB2BD8F81000344DEF /* getopt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = getopt.h; path = ../getopt.h; sourceTree = "<group>"; };
+		D13B7CFD2BD8F82F00344DEF /* hpki.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hpki.h; sourceTree = "<group>"; };
+		D13B7CFF2BD8FD9F00344DEF /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = a/libssl.a; sourceTree = "<group>"; };
+		D13B7D002BD8FD9F00344DEF /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = a/libjsoncpp.a; sourceTree = "<group>"; };
+		D13B7D012BD8FD9F00344DEF /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = a/libcrypto.a; sourceTree = "<group>"; };
+		D13B7D082BD8FEFD00344DEF /* apdu.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = apdu.cpp; path = ../include/apdu.cpp; sourceTree = "<group>"; };
+		D13B7D092BD8FEFD00344DEF /* apdu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = apdu.h; path = ../include/apdu.h; sourceTree = "<group>"; };
+		D13B7D0D2BD8FF9100344DEF /* My-Number-Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "My-Number-Card.h"; path = "../include/My-Number-Card.h"; sourceTree = "<group>"; };
+		D13B7D0E2BD8FF9100344DEF /* My-Number-Card_macOS.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = "My-Number-Card_macOS.cpp"; path = "../include/My-Number-Card_macOS.cpp"; sourceTree = "<group>"; };
+		D13B7D0F2BD8FF9100344DEF /* My-Number-Card.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = "My-Number-Card.cpp"; path = "../include/My-Number-Card.cpp"; sourceTree = "<group>"; };
+		D13B7D102BD8FF9100344DEF /* My-Number-Card_macOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "My-Number-Card_macOS.h"; path = "../include/My-Number-Card_macOS.h"; sourceTree = "<group>"; };
+		D13B7D142BD9000700344DEF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		D13B7D162BD9002200344DEF /* CryptoTokenKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoTokenKit.framework; path = System/Library/Frameworks/CryptoTokenKit.framework; sourceTree = SDKROOT; };
+		D13B7D1A2BD9074900344DEF /* hpki.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = hpki.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D11537532BD8F66C000C2D3E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D13B7D172BD9002200344DEF /* CryptoTokenKit.framework in Frameworks */,
+				D13B7D152BD9000700344DEF /* Security.framework in Frameworks */,
+				D13B7D022BD8FD9F00344DEF /* libssl.a in Frameworks */,
+				D13B7D032BD8FD9F00344DEF /* libjsoncpp.a in Frameworks */,
+				D13B7D042BD8FD9F00344DEF /* libcrypto.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D115374D2BD8F66C000C2D3E = {
+			isa = PBXGroup;
+			children = (
+				D13B7D1A2BD9074900344DEF /* hpki.entitlements */,
+				D13B7D0E2BD8FF9100344DEF /* My-Number-Card_macOS.cpp */,
+				D13B7D102BD8FF9100344DEF /* My-Number-Card_macOS.h */,
+				D13B7D0F2BD8FF9100344DEF /* My-Number-Card.cpp */,
+				D13B7D0D2BD8FF9100344DEF /* My-Number-Card.h */,
+				D13B7D082BD8FEFD00344DEF /* apdu.cpp */,
+				D13B7D092BD8FEFD00344DEF /* apdu.h */,
+				D13B7CFA2BD8F81000344DEF /* getopt.c */,
+				D13B7CFB2BD8F81000344DEF /* getopt.h */,
+				D11537582BD8F66C000C2D3E /* hpki */,
+				D11537572BD8F66C000C2D3E /* Products */,
+				D13B7CFE2BD8FD9F00344DEF /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		D11537572BD8F66C000C2D3E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D11537562BD8F66C000C2D3E /* hpki */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D11537582BD8F66C000C2D3E /* hpki */ = {
+			isa = PBXGroup;
+			children = (
+				D11537592BD8F66C000C2D3E /* hpki.m */,
+				D13B7CFD2BD8F82F00344DEF /* hpki.h */,
+			);
+			path = hpki;
+			sourceTree = "<group>";
+		};
+		D13B7CFE2BD8FD9F00344DEF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D13B7D162BD9002200344DEF /* CryptoTokenKit.framework */,
+				D13B7D142BD9000700344DEF /* Security.framework */,
+				D13B7D012BD8FD9F00344DEF /* libcrypto.a */,
+				D13B7D002BD8FD9F00344DEF /* libjsoncpp.a */,
+				D13B7CFF2BD8FD9F00344DEF /* libssl.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D11537552BD8F66C000C2D3E /* hpki */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D115375D2BD8F66C000C2D3E /* Build configuration list for PBXNativeTarget "hpki" */;
+			buildPhases = (
+				D11537522BD8F66C000C2D3E /* Sources */,
+				D11537532BD8F66C000C2D3E /* Frameworks */,
+				D11537542BD8F66C000C2D3E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = hpki;
+			productName = hpki;
+			productReference = D11537562BD8F66C000C2D3E /* hpki */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D115374E2BD8F66C000C2D3E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					D11537552BD8F66C000C2D3E = {
+						CreatedOnToolsVersion = 15.0.1;
+					};
+				};
+			};
+			buildConfigurationList = D11537512BD8F66C000C2D3E /* Build configuration list for PBXProject "hpki" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D115374D2BD8F66C000C2D3E;
+			productRefGroup = D11537572BD8F66C000C2D3E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D11537552BD8F66C000C2D3E /* hpki */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D11537522BD8F66C000C2D3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D13B7CFC2BD8F81000344DEF /* getopt.c in Sources */,
+				D13B7D132BD8FF9100344DEF /* My-Number-Card.cpp in Sources */,
+				D13B7D122BD8FF9100344DEF /* My-Number-Card_macOS.cpp in Sources */,
+				D115375A2BD8F66C000C2D3E /* hpki.m in Sources */,
+				D13B7D0A2BD8FEFD00344DEF /* apdu.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D115375B2BD8F66C000C2D3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = Y69CWUC25B;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../include\"/**";
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../include\"";
+			};
+			name = Debug;
+		};
+		D115375C2BD8F66C000C2D3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Y69CWUC25B;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../include\"/**";
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../include\"";
+			};
+			name = Release;
+		};
+		D115375E2BD8F66C000C2D3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/hpki.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/a",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.4d.hpki;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../include\"/**";
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../include\"";
+			};
+			name = Debug;
+		};
+		D115375F2BD8F66C000C2D3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/hpki.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/a",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.4d.hpki;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SYSTEM_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../include\"/**";
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../include\"";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D11537512BD8F66C000C2D3E /* Build configuration list for PBXProject "hpki" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D115375B2BD8F66C000C2D3E /* Debug */,
+				D115375C2BD8F66C000C2D3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D115375D2BD8F66C000C2D3E /* Build configuration list for PBXNativeTarget "hpki" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D115375E2BD8F66C000C2D3E /* Debug */,
+				D115375F2BD8F66C000C2D3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D115374E2BD8F66C000C2D3E /* Project object */;
+}
