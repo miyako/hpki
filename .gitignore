@@ -1,1 +1,3 @@
 macOS/build/*
+windows/hpki/.vs/*
+windows/hpki/x64/*
