@@ -11,5 +11,5 @@ hpki
 --pin4 {4桁暗証番号}
  --reader "SONY FeliCa RC-S300/P"
  --certificate identity
-{--output ~/Desktop/認証用証明 書.json}
+{--output ~/Desktop/認証用証明書.json}
 ```
