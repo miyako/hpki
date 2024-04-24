@@ -165,9 +165,9 @@ static bool _parse_atr(Json::Value& threadCtx) {
                                 
                                 unsigned char T0 = buf[1];
                                 unsigned char K = T0 & 0x0F;
-                                if(dwAtrLen > K + 6) {
+                                if (dwAtrLen > K) {
                                     std::string historicalBytes;
-                                    bytes_to_hex((const uint8_t *)&buf[6], K, historicalBytes);
+                                    bytes_to_hex((const uint8_t*)&buf[dwAtrLen - K - 1], K, historicalBytes);
                                     threadCtx["historicalBytes"] = historicalBytes;
                                 }
                             }
@@ -181,6 +181,7 @@ static bool _parse_atr(Json::Value& threadCtx) {
         }
         SCardReleaseContext(hContext);
     }
+    return true;
 }
 
 #ifdef __WINDOWS__
