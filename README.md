@@ -4,6 +4,20 @@
 
 マイナンバーカードまたは日本医師会認証局のICカードを使用するためのツール
 
+```
+usage: hpki [options...]
+-c, --certificate type: print certificate
+-s, --sign type: sign document
+-o, --output path: output file path
+-p, --pin4 val: specify scard short pin
+-P, --pin6 val: specify scard long pin
+-r, --reader val: specify scard reader
+-m, --mynumber: print personal identification number
+-i, --myinfo: print basic personal information
+-l, --list: print scard readers
+-v, --version: show version information
+```
+
 ### 認証用証明書を取得する
 
 * マイナンバーカード
@@ -18,6 +32,16 @@ hpki
 ### 認証用証明書で署名する
 
 * マイナンバーカード
+```
+hpki
+--pin4 {4桁暗証番号}
+ --reader "SONY FeliCa RC-S300/P"
+ --sign signature
+{--output ~/Desktop/署名.json}
+FILE
+```
+
+* 医師会カード
 ```
 hpki
 --pin4 {4桁暗証番号}
@@ -52,9 +76,19 @@ hpki
 FILE
 ```
 
+* 医師会カード
+```
+hpki
+--pin4 {4桁暗証番号}
+ --reader "SONY FeliCa RC-S300/P"
+ --sign signature
+{--output ~/Desktop/署名.json}
+FILE
+```
+
 `FILE`の代わりに`stdIn`でも良い
 
-### 署名結果の例
+### 署名例
 
 ```json
 {
@@ -65,6 +99,8 @@ FILE
    "success" : true
 }
 ```
+
+**注記**: なぜか日本医師会のカードはMacにHDMIを接続していると署名に失敗する（リーダーとUSBアダプターの相性かもしれない）
 
 ## 基本4情報の取得（マイナンバーカード）
 
@@ -83,3 +119,5 @@ hpki
 --reader "SONY FeliCa RC-S300/P"
  --mynumber
 ```
+
+` --mynumber`と` --myinfo`の両方を渡しても良い
