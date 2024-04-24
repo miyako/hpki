@@ -11,7 +11,7 @@ void _get_slots_windows(Json::Value& threadCtx) {
     
     Json::Value slotNames(Json::arrayValue);
     
-    uint32_t scope = threadCtx["scope"].asInt();
+    DWORD scope = SCARD_SCOPE_USER;
     
     SCARDCONTEXT hContext;
     LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
@@ -45,6 +45,9 @@ void _get_slots_windows(Json::Value& threadCtx) {
         }
         SCardReleaseContext(hContext);
     }
+
+
+    threadCtx["readers"] = slotNames;
 }
 
 static bool _parse_atr(Json::Value& threadCtx) {
