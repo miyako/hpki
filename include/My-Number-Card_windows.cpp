@@ -4,7 +4,11 @@
 
 void _sign_with_certificate_windows(Json::Value& threadCtx) {}
 void _get_my_certificate_windows(Json::Value& threadCtx) {}
-void _get_my_number_windows(Json::Value& threadCtx) {}
+void _get_my_number_windows(Json::Value& threadCtx) {
+    
+    
+    
+}
 void _get_my_information_windows(Json::Value& threadCtx) {}
 
 void _get_slots_windows(Json::Value& threadCtx) {
@@ -157,6 +161,16 @@ static bool _parse_atr(Json::Value& threadCtx) {
                                                      SCARD_ATTR_ATR_STRING,
                                                      &buf[0],
                                                      &dwAtrLen);
+                            if(lResult == SCARD_S_SUCCESS) {
+                                
+                                unsigned char T0 = buf[1];
+                                unsigned char K = T0 & 0x0F;
+                                if(dwAtrLen > K + 6) {
+                                    std::string historicalBytes;
+                                    bytes_to_hex((const uint8_t *)&buf[6], K, historicalBytes);
+                                    threadCtx["historicalBytes"] = historicalBytes;
+                                }
+                            }
                         }
                         SCardDisconnect(hCard, SCARD_LEAVE_CARD);
                         break;
