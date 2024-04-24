@@ -146,14 +146,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__WINDOWS__;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\macOS\hpki;$(ProjectDir)..\..\include;$(ProjectDir)..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996;4068;4267;4819</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>jsoncpp.lib;ws2_32.lib;crypt32.lib;libssl.lib;libcrypto.lib;winscard.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|arm64'">
@@ -185,7 +190,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\getopt.c" />
+    <ClCompile Include="..\..\include\apdu.cpp" />
+    <ClCompile Include="..\..\include\My-Number-Card.cpp" />
+    <ClCompile Include="..\..\include\My-Number-Card_windows.cpp" />
     <ClCompile Include="hpki.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\getopt.h" />
+    <ClInclude Include="..\..\include\apdu.h" />
+    <ClInclude Include="..\..\include\My-Number-Card.h" />
+    <ClInclude Include="..\..\include\My-Number-Card_windows.h" />
+    <ClInclude Include="..\..\macOS\hpki\hpki.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

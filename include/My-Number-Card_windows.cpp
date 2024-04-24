@@ -2,11 +2,16 @@
 
 #pragma mark デバイス
 
+void _sign_with_certificate_windows(Json::Value& threadCtx) {}
+void _get_my_certificate_windows(Json::Value& threadCtx) {}
+void _get_my_number_windows(Json::Value& threadCtx) {}
+void _get_my_information_windows(Json::Value& threadCtx) {}
+
 void _get_slots_windows(Json::Value& threadCtx) {
     
     Json::Value slotNames(Json::arrayValue);
     
-    uint32_t scope = threadCtx["scope"];
+    uint32_t scope = threadCtx["scope"].asInt();
     
     SCARDCONTEXT hContext;
     LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
@@ -29,7 +34,9 @@ void _get_slots_windows(Json::Value& threadCtx) {
                 if (pReader) {
                     while ('\0' != *pReader) {
                         std::wstring u16 = (const wchar_t *)pReader;
-                        slotNames.append(u16);
+                        std::string u8;
+                        u16_to_u8(u16, u8);
+                        slotNames.append(u8);
                         pReader = pReader + wcslen(pReader) + 1;
                     }
                     threadCtx["success"] = true;
@@ -42,12 +49,18 @@ void _get_slots_windows(Json::Value& threadCtx) {
 
 static bool _parse_atr(Json::Value& threadCtx) {
  
-    std::wstring slotName = threadCtx["slotName"].asString();
+    int timeout = 3; //seconds
+
+    std::string u8 = threadCtx["slotName"].asString();
+    std::wstring u16;
+    u8_to_u16(u8, u16);
     
-    LPTSTR lpszReaderName = (LPTSTR)slotName.c_str();
+    LPTSTR lpszReaderName = (LPTSTR)u16.c_str();
     
-    uint32_t scope = threadCtx["scope"];
-    
+    DWORD mode = SCARD_SHARE_SHARED;
+    DWORD scope = SCARD_SCOPE_USER;
+    DWORD protocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
+
     SCARDCONTEXT hContext;
     LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
     if (lResult == SCARD_E_NO_SERVICE) {
@@ -135,7 +148,7 @@ static bool _parse_atr(Json::Value& threadCtx) {
                                                  SCARD_ATTR_ATR_STRING, 
                                                  NULL,
                                                  &dwAtrLen);
-                        if (rv == SCARD_S_SUCCESS) {
+                        if (lResult == SCARD_S_SUCCESS) {
                             std::vector<uint8_t>buf(dwAtrLen);
                             lResult = SCardGetAttrib(hCard,
                                                      SCARD_ATTR_ATR_STRING,
@@ -152,3 +165,34 @@ static bool _parse_atr(Json::Value& threadCtx) {
         SCardReleaseContext(hContext);
     }
 }
+
+#ifdef __WINDOWS__
+void u8_to_u16(std::string& u8, std::wstring& u16) {
+
+    int len = MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)u8.c_str(), u8.length(), NULL, 0);
+
+    if (len) {
+        std::vector<uint8_t> buf((len + 1) * sizeof(wchar_t));
+        if (MultiByteToWideChar(CP_UTF8, 0, (LPCSTR)u8.c_str(), u8.length(), (LPWSTR)&buf[0], len)) {
+            u16 = std::wstring((const wchar_t*)&buf[0]);
+        }
+    }
+    else {
+        u16 = std::wstring((const wchar_t*)L"");
+    }
+}
+void u16_to_u8(std::wstring& u16, std::string& u8) {
+
+    int len = WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)u16.c_str(), u16.length(), NULL, 0, NULL, NULL);
+
+    if (len) {
+        std::vector<uint8_t> buf(len + 1);
+        if (WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)u16.c_str(), u16.length(), (LPSTR)&buf[0], len, NULL, NULL)) {
+            u8 = std::string((const char*)&buf[0]);
+        }
+    }
+    else {
+        u8 = std::string((const char*)"");
+    }
+}
+#endif

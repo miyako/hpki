@@ -7,14 +7,9 @@
 
 #include "json/json.h"
 #include "My-Number-Card.h"
+#include "getopt.h"
 
 int hpki(int argc, char * argv[]);
-
-#ifdef __APPLE__
-
-#endif
-
-#include "getopt.h"
 
 #define VERSION "1.0.0"
 
@@ -43,9 +38,10 @@ void create_parent_folder(const char *utf8_path);
 #endif
 
 #ifdef __WINDOWS__
-#include "Shlobj.h"
 #include "Windows.h"
+#include "Shlobj.h"
 void create_parent_folder(const char *utf8_path);
+FILE* ufopen(const char* utf8_path, const wchar_t* mode);
 #endif
 
 #endif
