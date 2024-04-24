@@ -19,6 +19,6 @@ void _get_my_information_windows(Json::Value& threadCtx);
 void _get_slots_windows(Json::Value& threadCtx);
 
 //static int _get_data_size(std::vector<uint8_t>& size);
-//static pki_type_t _get_pki_type(Json::Value& threadCtx);
+static pki_type_t _get_pki_type(Json::Value& threadCtx);
 
 #endif /* PLUGIN_MY_NUMBER_CARD_WINDOWS_H */

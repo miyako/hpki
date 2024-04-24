@@ -2,12 +2,115 @@
 
 #pragma mark デバイス
 
+static void _apdu_select_app_aux_my_number(Json::Value& threadCtx) {
+    
+}
+
 void _sign_with_certificate_windows(Json::Value& threadCtx) {}
 void _get_my_certificate_windows(Json::Value& threadCtx) {}
 void _get_my_number_windows(Json::Value& threadCtx) {
     
     _parse_atr(threadCtx);
-    
+    pki_type_t pki_type = (pki_type_t)threadCtx["type"].asInt();
+    if(pki_type==pki_type_j) {
+        DWORD protocols = SCARD_PROTOCOL_T0|SCARD_PROTOCOL_T1;
+        DWORD mode = SCARD_SHARE_SHARED;
+        DWORD scope = SCARD_SCOPE_USER;
+        int timeout = 3; //seconds
+        
+        SCARDCONTEXT hContext;
+        LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
+        if(lResult == SCARD_E_NO_SERVICE) {
+            HANDLE hEvent = SCardAccessStartedEvent();
+            DWORD dwResult = WaitForSingleObject(hEvent, DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER);
+            if (dwResult == WAIT_OBJECT_0) {
+                lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
+            }
+            SCardReleaseStartedEvent();
+        }
+        if (lResult == SCARD_S_SUCCESS) {
+            SCARD_READERSTATE readerState;
+            readerState.szReader = lpszReaderName;
+            readerState.dwCurrentState = SCARD_STATE_UNAWARE;
+            lResult = SCardGetStatusChange(hContext, 0, &readerState, 1);
+            if (lResult == SCARD_S_SUCCESS) {
+                int is_card_present = 0;
+                time_t startTime = time(0);
+                time_t anchorTime = startTime;
+                bool isPolling = true;
+                
+                while (isPolling) {
+                    time_t now = time(0);
+                    time_t elapsedTime = abs(startTime - now);
+                    if(elapsedTime > 0)
+                    {
+                        startTime = now;
+                        PA_YieldAbsolute();
+                    }
+                    elapsedTime = abs(anchorTime - now);
+                    if(elapsedTime < timeout) {
+
+                        if (readerState.dwEventState & SCARD_STATE_EMPTY) {
+                            lResult = SCardGetStatusChange(hContext, LIBPCSC_API_TIMEOUT, &readerState, 1);
+                        }
+                        
+                        if (readerState.dwEventState & SCARD_STATE_UNAVAILABLE) {
+                            isPolling = false;
+                        }
+                        
+                        if (readerState.dwEventState & SCARD_STATE_PRESENT) {
+                            is_card_present = 1;
+                            isPolling = false;
+                        }
+                         
+                    }else{
+                        /* timeout */
+                        isPolling = false;
+                    }
+                       
+                }
+                
+                if(is_card_present) {
+             
+                    SCARDHANDLE hCard;
+                    DWORD dwActiveProtocol;
+                    DWORD dwProtocol;
+                    DWORD dwAtrSize;
+                    DWORD dwState;
+                    
+                    BYTE atr[256];
+
+                    C_BLOB temp;
+                    
+                    lResult = SCardConnect(hContext,
+                                                                 lpszReaderName,
+                                                                 mode,
+                                                                 protocols,
+                                                                 &hCard,
+                                                                 &dwActiveProtocol);
+                    switch (lResult)
+                    {
+                        case (LONG)SCARD_W_REMOVED_CARD:
+                            /* SCARD_W_REMOVED_CARD */
+                            break;
+                        case SCARD_S_SUCCESS:
+                            lResult = SCardStatus(hCard, NULL, NULL, &dwState, &dwProtocol, atr, &dwAtrSize);
+                            if (lResult == SCARD_S_SUCCESS) {
+                                
+                            }/* SCardStatus */
+                            SCardDisconnect(hCard, SCARD_LEAVE_CARD);
+                            break;
+                        default:
+                            break;
+                    }
+ 
+                }
+            }
+            SCardReleaseContext(hContext);
+        }
+        _apdu_select_app_aux_my_number(threadCtx);
+        threadCtx["success"] = threadCtx["success"].asBool();
+    }
 }
 void _get_my_information_windows(Json::Value& threadCtx) {}
 
@@ -67,7 +170,7 @@ static bool _parse_atr(Json::Value& threadCtx) {
     DWORD mode = SCARD_SHARE_SHARED;
     DWORD scope = SCARD_SCOPE_USER;
     DWORD protocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
-
+    
     SCARDCONTEXT hContext;
     LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
     if (lResult == SCARD_E_NO_SERVICE) {
@@ -169,6 +272,7 @@ static bool _parse_atr(Json::Value& threadCtx) {
                                     std::string historicalBytes;
                                     bytes_to_hex((const uint8_t*)&buf[dwAtrLen - K - 1], K, historicalBytes);
                                     threadCtx["historicalBytes"] = historicalBytes;
+                                    threadCtx["type"] = _get_pki_type(threadCtx);
                                 }
                             }
                         }
@@ -214,3 +318,18 @@ void u16_to_u8(std::wstring& u16, std::string& u8) {
     }
 }
 #endif
+
+static pki_type_t _get_pki_type(Json::Value& threadCtx) {
+    
+    if(threadCtx["historicalBytes"].isString()){
+        std::string historicalBytes = threadCtx["historicalBytes"].asString();
+        if(historicalBytes == ID_HPKI) {
+            return pki_type_h;
+        }
+        if(historicalBytes == ID_JPKI) {
+            return pki_type_j;
+        }
+    }
+    
+    return pki_type_unknown;
+}
