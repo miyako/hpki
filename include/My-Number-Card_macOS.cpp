@@ -243,7 +243,10 @@ static void _apdu_verify_app_jpki_compute_digital_signature_identity(dispatch_se
            sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if(pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
                                     length:data.size()]
@@ -350,7 +353,10 @@ static void _apdu_verify_app_jpki_compute_digital_signature(dispatch_semaphore_t
            sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if(pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
                                     length:data.size()]
@@ -458,7 +464,10 @@ static void _apdu_verify_app_hpki_compute_digital_signature_identity(dispatch_se
            sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_HPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if(pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
                                     length:data.size()]
@@ -967,7 +976,10 @@ static void _apdu_verify_app_jpki_cert_signature(dispatch_semaphore_t sem,
            sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if(pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
                                     length:data.size()]
@@ -1147,7 +1159,10 @@ static void _apdu_verify_app_aux_my_number(dispatch_semaphore_t sem,
            sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if(pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
                                     length:data.size()]
@@ -1404,7 +1419,10 @@ static void _apdu_verify_app_aux_basic4i(dispatch_semaphore_t sem,
            sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if(pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
                                     length:data.size()]
