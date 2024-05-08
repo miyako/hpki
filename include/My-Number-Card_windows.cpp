@@ -218,6 +218,244 @@ static void _apdu_select_app_aux_my_number(SCARDHANDLE hCard, const SCARD_IO_REQ
     } 
 }
 
+static void _read_block_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value *threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_READ_BINARY));
+    memcpy(&data[0],
+        APDU_READ_BINARY,
+        sizeof(APDU_READ_BINARY));
+
+    int block = threadCtx->operator[]("block").asInt();
+    int size = threadCtx->operator[]("size").asInt();
+
+    data[2] = block;
+
+    if (size < 0x100) {
+        data[4] = size;
+    }
+
+    LPCBYTE pbSendBuffer = &data[0];
+    DWORD cbSendLength = data.size();
+    BYTE pbRecvBuffer[256];
+    DWORD cbRecvLength = 256;
+
+    LONG lResult;
+
+    lResult = SCardTransmit(hCard,
+        pioSendPci,
+        pbSendBuffer,
+        cbSendLength,
+        NULL,
+        pbRecvBuffer,
+        &cbRecvLength);
+
+    if (lResult == SCARD_S_SUCCESS) {
+
+        int block = threadCtx->operator[]("block").asInt();
+        int size = threadCtx->operator[]("size").asInt();
+
+        std::string hex;
+        if (size > 0xFF) {
+            bytes_to_hex((const uint8_t*)pbRecvBuffer, 0x0100, hex);
+        }
+        else {
+            bytes_to_hex((const uint8_t*)pbRecvBuffer, size, hex);
+        }
+
+        if (threadCtx->isMember("data")) {
+            std::string _hex = threadCtx->operator[]("data").asString();
+            threadCtx->operator[]("data") = _hex + hex;
+        }
+        else {
+            threadCtx->operator[]("data") = hex;
+        }
+
+        size -= 0x100;
+        block++;
+
+        threadCtx->operator[]("size").operator=(size);
+        threadCtx->operator[]("block").operator=(block);
+
+        if (size > 0) {
+            _read_block_basic4i(hCard, pioSendPci, threadCtx);
+        }
+        else {
+
+            if (threadCtx->isMember("data")) {
+
+                std::string hex = threadCtx->operator[]("data").asString();
+                std::vector<uint8_t>buf(0);
+                hex_to_bytes(hex, buf);
+                bool boundary = false;
+                bool field_id = false;
+                uint8_t field_type = 0;
+
+                for (size_t i = 0; i < buf.size(); ++i) {
+                    if (buf[i] == 0xDF) {
+                        boundary = true;
+                        continue;
+                    }
+                    if (boundary) {
+                        boundary = false;
+                        field_id = true;
+                        field_type = buf[i];
+                        continue;
+                    }
+                    if (field_id) {
+                        field_id = false;
+                        uint8_t field_length = buf[i];
+                        switch (field_type) {
+                        case 0x21:
+                            //header
+//                            threadCtx["header"] = std::string((const char *)&buf[i+1], field_length);
+                            break;
+                        case 0x22:
+                            //name
+//                                    threadCtx["commonName"] = /*std::string((const char *)&buf[i+1], field_length)*/;
+                            threadCtx->operator[]("commonName").operator=(std::string((const char*)&buf[i + 1], field_length));
+                            break;
+                        case 0x23:
+                            //address
+//                                    threadCtx["address"] = std::string((const char *)&buf[i+1], field_length);
+                            threadCtx->operator[]("address").operator=(std::string((const char*)&buf[i + 1], field_length));
+                            break;
+                        case 0x24:
+                            //dateOfBirth
+//                                    threadCtx["dateOfBirth"] = /*std::string((const char *)&buf[i+1], field_length)*/;
+                            threadCtx->operator[]("dateOfBirth").operator=(std::string((const char*)&buf[i + 1], field_length));
+                            break;
+                        case 0x25:
+                            //sex
+//                                    threadCtx["gender"] = std::string((const char *)&buf[i+1], field_length);
+                            threadCtx->operator[]("gender").operator=(std::string((const char*)&buf[i + 1], field_length));
+                            break;
+                        default:
+                            break;
+                        }
+                    }
+                }
+                //                    threadCtx["success"] = true;
+                //                    threadCtx->operator[]("certificate").operator=(certificate);
+                threadCtx->operator[]("success").operator=(true);
+            }
+
+        }
+       
+    }
+}
+
+static void _apdu_binary_read_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    threadCtx["block"] = 0x00;
+
+    _read_block_basic4i(hCard, pioSendPci, &threadCtx);
+
+}
+
+static void _apdu_binary_read_basic4i_length(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_READ_BINARY_GET_LENGTH));
+    memcpy(&data[0],
+        APDU_READ_BINARY_GET_LENGTH,
+        sizeof(APDU_READ_BINARY_GET_LENGTH));
+
+    LPCBYTE pbSendBuffer = &data[0];
+    DWORD cbSendLength = data.size();
+    BYTE pbRecvBuffer[256];
+    DWORD cbRecvLength = 256;
+
+    LONG lResult;
+
+    lResult = SCardTransmit(hCard,
+        pioSendPci,
+        pbSendBuffer,
+        cbSendLength,
+        NULL,
+        pbRecvBuffer,
+        &cbRecvLength);
+
+    if (lResult == SCARD_S_SUCCESS) {
+
+        BYTE SW1 = pbRecvBuffer[cbRecvLength - 2];
+        BYTE SW2 = pbRecvBuffer[cbRecvLength - 1];
+
+        if (_is_response_positive(SW1, SW2, threadCtx)) {
+
+            std::vector<uint8_t>size(4);
+
+            memcpy(&size[0],
+                &pbRecvBuffer[0],
+                size.size());
+
+            threadCtx["size"] = _get_data_size(size);
+            _apdu_binary_read_basic4i(hCard, pioSendPci, threadCtx);
+        }
+    }
+}
+
+static void _apdu_select_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+        APDU_SELECT_EF_UNDER_DF,
+        sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_BASIC4I_EF_JPKI_HI;
+    data[6] = APDU_SELECT_BASIC4I_EF_JPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_binary_read_basic4i_length(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_verify_app_aux_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::string pin = threadCtx["pin4"].asString();
+
+    std::vector<uint8_t>data(sizeof(APDU_VERIFY_PIN) + pin.length());
+    memcpy(&data[0],
+        APDU_VERIFY_PIN,
+        sizeof(APDU_VERIFY_PIN));
+    data[3] = APDU_VERIFY_PIN_EF_JPKI;
+    data[4] = pin.length();
+    memcpy(&data[5], pin.data(), pin.length());
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_select_basic4i(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_pin_aux_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+        APDU_SELECT_EF_UNDER_DF,
+        sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_PIN_CARD_EF_JPKI_HI;
+    data[6] = APDU_SELECT_PIN_CARD_EF_JPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_verify_app_aux_basic4i(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_app_aux_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::string hex = APDU_SELECT_CARD_AP_JPKI;
+    std::vector<uint8_t>buf(0);
+    hex_to_bytes(hex, buf);
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_FILE_DF) + buf.size() - 1);
+    memcpy(&data[0],
+        APDU_SELECT_FILE_DF,
+        sizeof(APDU_SELECT_FILE_DF));
+    data[3] = APDU_SELECT_FILE_DF_P2_RFU_JPKI;
+    data[4] = buf.size();
+    memcpy(&data[5], &buf[0], buf.size());
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_select_pin_aux_basic4i(hCard, pioSendPci, threadCtx);
+    }
+}
+
 typedef void (*apdu_api_t)(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx);
 
 static void _connect(Json::Value& threadCtx, apdu_api_t api){
@@ -328,12 +566,18 @@ static void _connect(Json::Value& threadCtx, apdu_api_t api){
 
 void _sign_with_certificate_windows(Json::Value& threadCtx) {}
 void _get_my_certificate_windows(Json::Value& threadCtx) {}
+
 void _get_my_number_windows(Json::Value& threadCtx) {
     
     _connect(threadCtx, _apdu_select_app_aux_my_number);
 
 }
-void _get_my_information_windows(Json::Value& threadCtx) {}
+
+void _get_my_information_windows(Json::Value& threadCtx) {
+
+    _connect(threadCtx, _apdu_select_app_aux_basic4i);
+
+}
 
 void _get_slots_windows(Json::Value& threadCtx) {
     
