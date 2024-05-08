@@ -179,7 +179,9 @@ static void _apdu_verify_app_aux_my_number(SCARDHANDLE hCard, const SCARD_IO_REQ
         sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if (pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
         _apdu_select_my_number(hCard, pioSendPci, threadCtx);
@@ -417,7 +419,9 @@ static void _apdu_verify_app_aux_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUE
         sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if (pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
         _apdu_select_basic4i(hCard, pioSendPci, threadCtx);
@@ -791,7 +795,9 @@ static void _apdu_verify_app_jpki_cert_signature(SCARDHANDLE hCard, const SCARD_
         sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if (pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
         _apdu_select_jpki_cert_signature(hCard, pioSendPci, threadCtx);
@@ -896,7 +902,9 @@ static void _apdu_verify_app_jpki_compute_digital_signature_identity(SCARDHANDLE
         sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_JPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if (pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
         _apdu_select_jpki_key_identity(hCard, pioSendPci, threadCtx);
@@ -1001,7 +1009,9 @@ static void _apdu_verify_app_hpki_compute_digital_signature_identity(SCARDHANDLE
         sizeof(APDU_VERIFY_PIN));
     data[3] = APDU_VERIFY_PIN_EF_HPKI;
     data[4] = pin.length();
-    memcpy(&data[5], pin.data(), pin.length());
+    if (pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
         _apdu_select_hpki_key(hCard, pioSendPci, threadCtx);
@@ -1041,6 +1051,53 @@ static void _apdu_select_app_hpki_compute_digital_signature_identity(SCARDHANDLE
     }
 }
 
+static void _apdu_select_jpki_key_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+        APDU_SELECT_EF_UNDER_DF,
+        sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_KEY_SIGNATURE_EF_JPKI_HI;
+    data[6] = APDU_SELECT_KEY_SIGNATURE_EF_JPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_compute_digital_signature_jpki(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_verify_app_jpki_compute_digital_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::string pin = threadCtx["pin6"].asString();
+
+    std::vector<uint8_t>data(sizeof(APDU_VERIFY_PIN) + pin.length());
+    memcpy(&data[0],
+        APDU_VERIFY_PIN,
+        sizeof(APDU_VERIFY_PIN));
+    data[3] = APDU_VERIFY_PIN_EF_JPKI;
+    data[4] = pin.length();
+    if (pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_select_jpki_key_signature(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_pin_jpki_compute_digital_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+        APDU_SELECT_EF_UNDER_DF,
+        sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_PIN_SIGNATURE_EF_JPKI_HI;
+    data[6] = APDU_SELECT_PIN_SIGNATURE_EF_JPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_verify_app_jpki_compute_digital_signature(hCard, pioSendPci, threadCtx);
+    }
+}
+
 static void _apdu_select_app_jpki_compute_digital_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
     std::string hex = APDU_SELECT_IDENTITY_AP_JPKI;
@@ -1055,7 +1112,7 @@ static void _apdu_select_app_jpki_compute_digital_signature(SCARDHANDLE hCard, c
     memcpy(&data[5], &buf[0], buf.size());
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
-        _apdu_select_pin_jpki_compute_digital_signature_identity(hCard, pioSendPci, threadCtx);
+        _apdu_select_pin_jpki_compute_digital_signature(hCard, pioSendPci, threadCtx);
     }
 }
 
