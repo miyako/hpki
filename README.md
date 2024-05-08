@@ -53,7 +53,7 @@ hpki
 hpki
 --pin4 {4桁暗証番号}
  --reader "SONY FeliCa RC-S300/P"
- --sign signature
+ --sign identity
 {--output ~/Desktop/署名.json}
 FILE
 ```
@@ -63,7 +63,7 @@ FILE
 hpki
 --pin4 {4桁暗証番号}
  --reader "SONY FeliCa RC-S300/P"
- --sign signature
+ --sign identity
 {--output ~/Desktop/署名.json}
 FILE
 ```
