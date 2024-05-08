@@ -652,6 +652,39 @@ static void _apdu_select_app_jpki_cert_identity(SCARDHANDLE hCard, const SCARD_I
     }
 }
 
+static void _apdu_select_hpki_cert_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+        APDU_SELECT_EF_UNDER_DF,
+        sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_CRT_EF_HPKI_HI;
+    data[6] = APDU_SELECT_CRT_EF_HPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_binary_read_jpki_cert_identity_length(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_app_hpki_cert_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::string hex = APDU_SELECT_IDENTITY_AP_HPKI;
+    std::vector<uint8_t>buf(0);
+    hex_to_bytes(hex, buf);
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_FILE_DF) + buf.size());
+    memcpy(&data[0],
+        APDU_SELECT_FILE_DF,
+        sizeof(APDU_SELECT_FILE_DF));
+
+    data[4] = buf.size();
+    memcpy(&data[5], &buf[0], buf.size());
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_select_hpki_cert_identity(hCard, pioSendPci, threadCtx);
+    }
+}
+
 typedef void (*apdu_api_t)(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx);
 
 static void _connect(Json::Value& threadCtx, apdu_api_t api){
@@ -774,7 +807,7 @@ void _get_my_certificate_windows(Json::Value& threadCtx) {
             _connect(threadCtx, _apdu_select_app_jpki_cert_identity);
             break;
         case pki_type_h:
-            //_connect(threadCtx, _apdu_select_app_hpki_cert_identity);
+            _connect(threadCtx, _apdu_select_app_hpki_cert_identity);
             break;
         default:
             break;
