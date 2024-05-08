@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/github/license/miyako/4d-class-hpki)](LICENSE)
 ![downloads](https://img.shields.io/github/downloads/miyako/4d-class-hpki/total)
 
-**注記**: コマンドラインツール自体は4Dに依存しません。
+**注記**: コマンドラインツール`hpki`は4Dに依存しません。
 
 # 4d-class-hpki
 
