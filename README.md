@@ -5,6 +5,8 @@
 
 **注記**: コマンドラインツール`hpki`は4Dに依存しません。
 
+<img style="height:400px;width:auto" src="https://github.com/miyako/4d-class-hpki/assets/1725068/997735ed-295f-42ec-b3c3-df2fcc4cd8b5" />
+
 # 4d-class-hpki
 
 ## `hpki`
@@ -53,7 +55,7 @@ hpki
 hpki
 --pin4 {4桁暗証番号}
  --reader "SONY FeliCa RC-S300/P"
- --sign signature
+ --sign identity
 {--output ~/Desktop/署名.json}
 FILE
 ```
@@ -63,7 +65,7 @@ FILE
 hpki
 --pin4 {4桁暗証番号}
  --reader "SONY FeliCa RC-S300/P"
- --sign signature
+ --sign identity
 {--output ~/Desktop/署名.json}
 FILE
 ```
