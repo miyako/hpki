@@ -5,7 +5,7 @@
 
 **注記**: コマンドラインツール`hpki`は4Dに依存しません。
 
-![](https://github.com/miyako/4d-class-hpki/assets/1725068/997735ed-295f-42ec-b3c3-df2fcc4cd8b5)
+<img style="height:400px;width:auto" src="https://github.com/miyako/4d-class-hpki/assets/1725068/997735ed-295f-42ec-b3c3-df2fcc4cd8b5" />
 
 # 4d-class-hpki
 
