@@ -464,25 +464,22 @@ static void _connect(Json::Value& threadCtx, apdu_api_t api){
     _parse_atr(threadCtx, slotName);
     LPTSTR lpszReaderName = (LPTSTR)slotName.c_str();
 
-    pki_type_t pki_type = (pki_type_t)threadCtx["type"].asInt();
+    DWORD protocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
+    DWORD mode = SCARD_SHARE_SHARED;
+    DWORD scope = SCARD_SCOPE_USER;
+    int timeout = 3; //seconds
 
-    if (pki_type == pki_type_j) {
-        DWORD protocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
-        DWORD mode = SCARD_SHARE_SHARED;
-        DWORD scope = SCARD_SCOPE_USER;
-        int timeout = 3; //seconds
-
-        SCARDCONTEXT hContext;
-        LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
-        if (lResult == SCARD_E_NO_SERVICE) {
-            HANDLE hEvent = SCardAccessStartedEvent();
-            DWORD dwResult = WaitForSingleObject(hEvent, DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER);
-            if (dwResult == WAIT_OBJECT_0) {
-                lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
-            }
-            SCardReleaseStartedEvent();
+    SCARDCONTEXT hContext;
+    LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
+    if (lResult == SCARD_E_NO_SERVICE) {
+        HANDLE hEvent = SCardAccessStartedEvent();
+        DWORD dwResult = WaitForSingleObject(hEvent, DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER);
+        if (dwResult == WAIT_OBJECT_0) {
+            lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
         }
-        if (lResult == SCARD_S_SUCCESS) {
+        SCardReleaseStartedEvent();
+    }
+    if (lResult == SCARD_S_SUCCESS) {
             SCARD_READERSTATE readerState;
             readerState.szReader = lpszReaderName;
             readerState.dwCurrentState = SCARD_STATE_UNAWARE;
@@ -561,22 +558,70 @@ static void _connect(Json::Value& threadCtx, apdu_api_t api){
             }
             SCardReleaseContext(hContext);
         }
-    }
+    
 }
 
 void _sign_with_certificate_windows(Json::Value& threadCtx) {}
-void _get_my_certificate_windows(Json::Value& threadCtx) {}
+
+void _get_my_certificate_windows(Json::Value& threadCtx) {
+
+    std::wstring slotName;
+    _parse_atr(threadCtx, slotName);
+    LPTSTR lpszReaderName = (LPTSTR)slotName.c_str();
+
+    pki_type_t pki_type = (pki_type_t)threadCtx["type"].asInt();
+
+    if (threadCtx["certificateType"].asInt() == certificate_type_identity) {
+        switch (pki_type) {
+        case pki_type_j:
+            _connect(threadCtx, _apdu_select_app_jpki_cert_identity);
+            break;
+        case pki_type_h:
+            _connect(threadCtx, _apdu_select_app_hpki_cert_identity);
+            break;
+        default:
+            break;
+        }
+    }
+    else {
+        switch (pki_type) {
+        case pki_type_j:
+            _connect(threadCtx, _apdu_select_app_jpki_cert_signature);
+            break;
+        case pki_type_h:
+            _connect(threadCtx, _apdu_select_app_hpki_cert_signature);
+            break;
+        default:
+            break;
+        }
+    }
+
+    
+
+}
 
 void _get_my_number_windows(Json::Value& threadCtx) {
     
-    _connect(threadCtx, _apdu_select_app_aux_my_number);
+    std::wstring slotName;
+    _parse_atr(threadCtx, slotName);
 
+    pki_type_t pki_type = (pki_type_t)threadCtx["type"].asInt();
+
+    if (pki_type == pki_type_j) {
+        _connect(threadCtx, _apdu_select_app_aux_my_number);
+    }
 }
 
 void _get_my_information_windows(Json::Value& threadCtx) {
 
-    _connect(threadCtx, _apdu_select_app_aux_basic4i);
+    std::wstring slotName;
+    _parse_atr(threadCtx, slotName);
 
+    pki_type_t pki_type = (pki_type_t)threadCtx["type"].asInt();
+
+    if (pki_type == pki_type_j) {
+        _connect(threadCtx, _apdu_select_app_aux_basic4i);
+    }
 }
 
 void _get_slots_windows(Json::Value& threadCtx) {
