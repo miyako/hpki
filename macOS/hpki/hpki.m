@@ -58,6 +58,10 @@ static void usage(void) {
 
 int hpki(int argc, char *argv[]) {
 
+    if (argc == 1) {
+                list();
+            }
+    
     int opt, longoptind;
     std::string pin4;
     std::string pin6;

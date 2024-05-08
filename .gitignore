@@ -2,3 +2,5 @@ macOS/build/*
 windows/hpki/.vs/*
 windows/hpki/x64/*
 windows/hpki/hpki.pdb
+4d-class-hpki/Data/*
+4d-class-hpki/userPreferences.*

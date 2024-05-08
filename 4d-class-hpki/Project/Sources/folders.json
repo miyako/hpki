@@ -1,0 +1,22 @@
+{
+	"CLI": {
+		"classes": [
+			"_CLI",
+			"hpki"
+		]
+	},
+	"Controller": {
+		"classes": [
+			"_CLI_Controller",
+			"_hpki_Controller",
+			"_hpkiUI_Controller"
+		]
+	},
+	"Form": {
+		"classes": [
+			"_Form",
+			"hpkiForm"
+		]
+	},
+	"trash": {}
+}

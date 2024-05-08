@@ -1,0 +1,550 @@
+{
+	"$4d": {
+		"version": "1",
+		"kind": "form"
+	},
+	"windowSizingX": "variable",
+	"windowSizingY": "variable",
+	"windowMinWidth": 622,
+	"windowMinHeight": 203,
+	"windowMaxWidth": 32767,
+	"windowMaxHeight": 32767,
+	"events": [
+		"onLoad",
+		"onUnload"
+	],
+	"windowTitle": "",
+	"destination": "detailScreen",
+	"pages": [
+		{
+			"objects": {}
+		},
+		{
+			"objects": {
+				"Form.sourceIcon": {
+					"type": "input",
+					"left": 14,
+					"top": 289,
+					"width": 100,
+					"height": 100,
+					"dataSource": "Form:C1466.sourceIcon",
+					"contextMenu": "none",
+					"events": [
+						"onDrop"
+					],
+					"dropping": "custom",
+					"dragging": "none",
+					"method": "ObjectMethods/Form.sourceIcon.4dm",
+					"dataSourceTypeHint": "picture",
+					"pictureFormat": "proportionalCenter",
+					"hideFocusRing": true,
+					"borderStyle": "none"
+				},
+				"readers": {
+					"type": "dropdown",
+					"left": 11,
+					"top": 14,
+					"width": 353,
+					"height": 21,
+					"events": [
+						"onDataChange"
+					],
+					"dataSource": "Form:C1466.readers",
+					"dataSourceTypeHint": "object"
+				},
+				"cardType": {
+					"type": "input",
+					"left": 107,
+					"top": 90,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.cardType",
+					"enterable": false
+				},
+				"path:1": {
+					"type": "text",
+					"text": "カード種別:",
+					"top": 90,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"マイナンバーカード": {
+					"type": "button",
+					"text": "マイナンバーカード",
+					"top": 46,
+					"left": 107,
+					"width": 137,
+					"height": 24,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/マイナンバーカード.4dm",
+					"focusable": false,
+					"sizingX": "move",
+					"sizingY": "move"
+				},
+				"myNumber": {
+					"type": "input",
+					"left": 107,
+					"top": 115,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.obscure(Form:C1466.myNumber)",
+					"enterable": false
+				},
+				"path:2": {
+					"type": "text",
+					"text": "マイナンバー:",
+					"top": 115,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"address": {
+					"type": "input",
+					"left": 107,
+					"top": 140,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.address",
+					"enterable": false
+				},
+				"path:3": {
+					"type": "text",
+					"text": "住所:",
+					"top": 140,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"commonName": {
+					"type": "input",
+					"left": 107,
+					"top": 165,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.commonName",
+					"enterable": false
+				},
+				"path:4": {
+					"type": "text",
+					"text": "名前:",
+					"top": 165,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"dateOfBirth": {
+					"type": "input",
+					"left": 107,
+					"top": 190,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.dateOfBirth",
+					"enterable": false
+				},
+				"path:5": {
+					"type": "text",
+					"text": "生年月日:",
+					"top": 190,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"gender": {
+					"type": "input",
+					"left": 107,
+					"top": 215,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.gender",
+					"enterable": false
+				},
+				"path:6": {
+					"type": "text",
+					"text": "性別:",
+					"top": 215,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"Check Box": {
+					"type": "checkbox",
+					"text": "Folder(fk home folder).file(\"pin4\").exists",
+					"top": 392,
+					"left": 175,
+					"width": 291,
+					"height": 32,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"enterable": false,
+					"focusable": false,
+					"dataSource": "Form:C1466.pin4File.exists"
+				},
+				"認証用証明書": {
+					"type": "button",
+					"text": "認証用証明書",
+					"top": 46,
+					"left": 547,
+					"width": 110,
+					"height": 24,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/認証用証明書.4dm",
+					"focusable": false,
+					"sizingX": "move",
+					"sizingY": "move"
+				},
+				"Check Box1": {
+					"type": "checkbox",
+					"text": "Folder(fk home folder).file(\"pin6\").exists",
+					"top": 392,
+					"left": 493,
+					"width": 291,
+					"height": 32,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"enterable": false,
+					"focusable": false,
+					"dataSource": "Form:C1466.pin6File.exists"
+				},
+				"署名用証明書": {
+					"type": "button",
+					"text": "署名用証明書",
+					"top": 46,
+					"left": 674,
+					"width": 110,
+					"height": 24,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/署名用証明書.4dm",
+					"focusable": false,
+					"sizingX": "move",
+					"sizingY": "move"
+				},
+				"pem": {
+					"type": "input",
+					"left": 547,
+					"top": 90,
+					"width": 237,
+					"height": 37,
+					"dataSource": "Form:C1466.pem",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:7": {
+					"type": "text",
+					"text": "証明書PEM形式:",
+					"top": 90,
+					"left": 408,
+					"width": 126,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"der": {
+					"type": "input",
+					"left": 547,
+					"top": 135,
+					"width": 237,
+					"height": 37,
+					"dataSource": "Form:C1466.der",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:8": {
+					"type": "text",
+					"text": "証明書DER形式:",
+					"top": 135,
+					"left": 428,
+					"width": 106,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"serialNumber": {
+					"type": "input",
+					"left": 547,
+					"top": 180,
+					"width": 237,
+					"height": 17,
+					"dataSource": "Form:C1466.serialNumber",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:9": {
+					"type": "text",
+					"text": "番号:",
+					"top": 180,
+					"left": 428,
+					"width": 106,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"issuer": {
+					"type": "input",
+					"left": 547,
+					"top": 205,
+					"width": 237,
+					"height": 17,
+					"dataSource": "Form:C1466.issuer",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:10": {
+					"type": "text",
+					"text": "発行者:",
+					"top": 205,
+					"left": 428,
+					"width": 106,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"subject": {
+					"type": "input",
+					"left": 547,
+					"top": 230,
+					"width": 237,
+					"height": 17,
+					"dataSource": "Form:C1466.subject",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:11": {
+					"type": "text",
+					"text": "サブジェクト:",
+					"top": 230,
+					"left": 428,
+					"width": 106,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"notBefore": {
+					"type": "input",
+					"left": 547,
+					"top": 255,
+					"width": 237,
+					"height": 17,
+					"dataSource": "Form:C1466.notBefore",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:12": {
+					"type": "text",
+					"text": "いつから:",
+					"top": 255,
+					"left": 428,
+					"width": 106,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"notAfter": {
+					"type": "input",
+					"left": 547,
+					"top": 280,
+					"width": 237,
+					"height": 17,
+					"dataSource": "Form:C1466.notAfter",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:13": {
+					"type": "text",
+					"text": "いつまで:",
+					"top": 280,
+					"left": 428,
+					"width": 106,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"認証用証明書で署名": {
+					"type": "button",
+					"text": "認証用証明書で署名",
+					"top": 252,
+					"left": 14,
+					"width": 150,
+					"height": 24,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/認証用証明書で署名.4dm",
+					"focusable": false,
+					"sizingX": "move",
+					"sizingY": "move"
+				},
+				"署名用証明書で署名": {
+					"type": "button",
+					"text": "署名用証明書で署名",
+					"top": 252,
+					"left": 181,
+					"width": 150,
+					"height": 24,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/署名用証明書で署名.4dm",
+					"focusable": false,
+					"sizingX": "move",
+					"sizingY": "move"
+				},
+				"digestInfo": {
+					"type": "input",
+					"left": 267,
+					"top": 307,
+					"width": 237,
+					"height": 37,
+					"dataSource": "Form:C1466.digestInfo",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:14": {
+					"type": "text",
+					"text": "署名ハッシュ:",
+					"top": 307,
+					"left": 128,
+					"width": 126,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"signature": {
+					"type": "input",
+					"left": 267,
+					"top": 352,
+					"width": 237,
+					"height": 37,
+					"dataSource": "Form:C1466.signature",
+					"enterable": false,
+					"sizingX": "grow"
+				},
+				"path:15": {
+					"type": "text",
+					"text": "署名:",
+					"top": 352,
+					"left": 148,
+					"width": 106,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				}
+			}
+		},
+		{
+			"objects": {
+				"Form.stdOut": {
+					"type": "input",
+					"left": 258,
+					"top": 41,
+					"width": 354,
+					"height": 81,
+					"enterable": false,
+					"focusable": false,
+					"fill": "transparent",
+					"dataSource": "Form:C1466.stdOut",
+					"sizingX": "grow",
+					"sizingY": "grow"
+				},
+				"Form.stdErr": {
+					"type": "input",
+					"left": 258,
+					"top": 131,
+					"width": 354,
+					"height": 81,
+					"enterable": false,
+					"focusable": false,
+					"fill": "transparent",
+					"dataSource": "Form:C1466.stdErr",
+					"sizingY": "move",
+					"sizingX": "grow"
+				},
+				"stdOut:": {
+					"type": "text",
+					"text": "stdOut:",
+					"top": 38,
+					"left": 163,
+					"width": 83,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold"
+				},
+				"stdErr:": {
+					"type": "text",
+					"text": "stdErr:",
+					"top": 128,
+					"left": 163,
+					"width": 83,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				}
+			}
+		}
+	],
+	"method": "method.4dm",
+	"geometryStamp": 1206,
+	"editor": {
+		"activeView": "View 1",
+		"defaultView": "View 1",
+		"views": {
+			"View 1": {}
+		}
+	},
+	"rightMargin": 10,
+	"bottomMargin": 10
+}
