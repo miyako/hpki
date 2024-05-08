@@ -7,7 +7,7 @@
 #include "winscard.h"
 #define DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER 5000
 #define LIBPCSC_API_TIMEOUT 2000 
-static bool _parse_atr(Json::Value& threadCtx, std::wstring& slotName);
+static bool _parse_atr(Json::Value& threadCtx);
 void u16_to_u8(std::wstring& u16, std::string& u8);
 void u8_to_u16(std::string& u8, std::wstring& u16);
 #endif

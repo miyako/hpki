@@ -24,8 +24,8 @@ static bool _transmit_request(SCARDHANDLE hCard,
 
     LPCBYTE pbSendBuffer = &data[0];
     DWORD cbSendLength = data.size();
-    BYTE pbRecvBuffer[256];
-    DWORD cbRecvLength = 256;
+    BYTE pbRecvBuffer[258];
+    DWORD cbRecvLength = sizeof(pbRecvBuffer);
 
     LONG lResult;
 
@@ -84,8 +84,8 @@ static void _apdu_binary_read_my_number(SCARDHANDLE hCard, const SCARD_IO_REQUES
 
     LPCBYTE pbSendBuffer = &data[0];
     DWORD cbSendLength = data.size();
-    BYTE pbRecvBuffer[256];
-    DWORD cbRecvLength = 256;
+    BYTE pbRecvBuffer[258];
+    DWORD cbRecvLength = sizeof(pbRecvBuffer);
 
     LONG lResult;
 
@@ -123,8 +123,8 @@ static void _apdu_binary_read_my_number_length(SCARDHANDLE hCard, const SCARD_IO
 
     LPCBYTE pbSendBuffer = &data[0];
     DWORD cbSendLength = data.size();
-    BYTE pbRecvBuffer[256];
-    DWORD cbRecvLength = 256;
+    BYTE pbRecvBuffer[258];
+    DWORD cbRecvLength = sizeof(pbRecvBuffer);
 
     LONG lResult;
 
@@ -236,8 +236,8 @@ static void _read_block_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSe
 
     LPCBYTE pbSendBuffer = &data[0];
     DWORD cbSendLength = data.size();
-    BYTE pbRecvBuffer[256];
-    DWORD cbRecvLength = 256;
+    BYTE pbRecvBuffer[258];
+    DWORD cbRecvLength = sizeof(pbRecvBuffer);
 
     LONG lResult;
 
@@ -361,8 +361,8 @@ static void _apdu_binary_read_basic4i_length(SCARDHANDLE hCard, const SCARD_IO_R
 
     LPCBYTE pbSendBuffer = &data[0];
     DWORD cbSendLength = data.size();
-    BYTE pbRecvBuffer[256];
-    DWORD cbRecvLength = 256;
+    BYTE pbRecvBuffer[258];
+    DWORD cbRecvLength = sizeof(pbRecvBuffer);
 
     LONG lResult;
 
@@ -456,12 +456,211 @@ static void _apdu_select_app_aux_basic4i(SCARDHANDLE hCard, const SCARD_IO_REQUE
     }
 }
 
+static void _read_block_cert_jpki(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value* threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_READ_BINARY));
+    memcpy(&data[0],
+        APDU_READ_BINARY,
+        sizeof(APDU_READ_BINARY));
+
+    int block = threadCtx->operator[]("block").asInt();
+    int size = threadCtx->operator[]("size").asInt();
+
+    data[2] = block;
+
+    if (size < 0x100) {
+        data[4] = size;
+    }
+
+    LPCBYTE pbSendBuffer = &data[0];
+    DWORD cbSendLength = data.size();
+    BYTE pbRecvBuffer[258];
+    DWORD cbRecvLength = sizeof(pbRecvBuffer);
+
+    LONG lResult;
+
+    lResult = SCardTransmit(hCard,
+        pioSendPci,
+        pbSendBuffer,
+        cbSendLength,
+        NULL,
+        pbRecvBuffer,
+        &cbRecvLength);
+
+    if (lResult == SCARD_S_SUCCESS) {
+
+        int block = threadCtx->operator[]("block").asInt();
+        int size = threadCtx->operator[]("size").asInt();
+
+        std::string hex;
+        if (size > 0xFF) {
+            bytes_to_hex((const uint8_t*)pbRecvBuffer, 0x0100, hex);
+        }
+        else {
+            bytes_to_hex((const uint8_t*)pbRecvBuffer, size, hex);
+        }
+
+        if (threadCtx->isMember("data")) {
+            std::string _hex = threadCtx->operator[]("data").asString();
+            threadCtx->operator[]("data") = _hex + hex;
+        }
+        else {
+            threadCtx->operator[]("data") = hex;
+        }
+
+        size -= 0x100;
+        block++;
+
+        threadCtx->operator[]("size").operator=(size);
+        threadCtx->operator[]("block").operator=(block);
+
+        if (size > 0) {
+            _read_block_cert_jpki(hCard, pioSendPci, threadCtx);
+        }
+        else {
+
+            if (threadCtx->isMember("data")) {
+                Json::Value certificate(Json::objectValue);
+                std::string hex = threadCtx->operator[]("data").asString();
+                certificate["der"] = hex;
+
+                std::vector<uint8_t>buf(0);
+                hex_to_bytes(hex, buf);
+                const uint8_t* p = &buf[0];
+                X509* x509 = d2i_X509(NULL, &p, buf.size());
+                if (x509) {
+                    BIO* bio = BIO_new(BIO_s_mem());
+                    if (PEM_write_bio_X509(bio, x509)) {
+                        uint64_t len = BIO_number_written(bio) + 1;
+                        std::vector<uint8_t>_buf(len);
+                        if (BIO_read(bio, &_buf[0], (int)len)) {
+                            certificate["pem"] = std::string((const char*)&_buf[0], len);
+                        }
+                    }
+                    BIO_free(bio);
+
+                   // X509_NAME* subject = X509_get_subject_name(x509);
+                    certificate["subject"] = X509_NAME_oneline(X509_get_subject_name(x509), NULL, 0);
+
+                   // X509_NAME* issuer = X509_get_issuer_name(x509);
+                    certificate["issuer"] = X509_NAME_oneline(X509_get_issuer_name(x509), NULL, 0);
+
+                    long serialNumber = ASN1_INTEGER_get(X509_get_serialNumber(x509));
+                    long version = X509_get_version(x509);
+                    certificate["serialNumber"] = (int)serialNumber;
+                    certificate["version"] = (int)version;
+                    ASN1_TIME* notBefore = X509_get_notBefore(x509);
+                    ASN1_TIME* notAfter = X509_get_notAfter(x509);
+
+                    std::string textValue;
+                    asn_time_to_iso(notBefore, textValue);
+                    certificate["notBefore"] = textValue;
+
+                    asn_time_to_iso(notAfter, textValue);
+                    certificate["notAfter"] = textValue;
+
+                    X509_free(x509);
+                }
+
+                threadCtx->operator[]("certificate").operator=(certificate);
+                threadCtx->operator[]("success").operator=(true);
+            }
+
+        }
+
+    }
+}
+
+static void _apdu_binary_read_jpki_cert_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    threadCtx["block"] = 0x00;
+
+    _read_block_cert_jpki(hCard, pioSendPci, &threadCtx);
+
+}
+
+static void _apdu_binary_read_jpki_cert_identity_length(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_READ_BINARY_GET_LENGTH));
+    memcpy(&data[0],
+        APDU_READ_BINARY_GET_LENGTH,
+        sizeof(APDU_READ_BINARY_GET_LENGTH));
+
+    LPCBYTE pbSendBuffer = &data[0];
+    DWORD cbSendLength = data.size();
+    BYTE pbRecvBuffer[258];
+    DWORD cbRecvLength = sizeof(pbRecvBuffer);
+
+    LONG lResult;
+
+    lResult = SCardTransmit(hCard,
+        pioSendPci,
+        pbSendBuffer,
+        cbSendLength,
+        NULL,
+        pbRecvBuffer,
+        &cbRecvLength);
+
+    if (lResult == SCARD_S_SUCCESS) {
+
+        BYTE SW1 = pbRecvBuffer[cbRecvLength - 2];
+        BYTE SW2 = pbRecvBuffer[cbRecvLength - 1];
+
+        if (_is_response_positive(SW1, SW2, threadCtx)) {
+
+            std::vector<uint8_t>size(4);
+
+            memcpy(&size[0],
+                &pbRecvBuffer[0],
+                size.size());
+
+            threadCtx["size"] = _get_data_size(size);
+            _apdu_binary_read_jpki_cert_identity(hCard, pioSendPci, threadCtx);
+        }
+    }
+}
+
+static void _apdu_select_jpki_cert_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+        APDU_SELECT_EF_UNDER_DF,
+        sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_CRT_IDENTITY_EF_JPKI_HI;
+    data[6] = APDU_SELECT_CRT_IDENTITY_EF_JPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_binary_read_jpki_cert_identity_length(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_app_jpki_cert_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::string hex = APDU_SELECT_IDENTITY_AP_JPKI;
+    std::vector<uint8_t>buf(0);
+    hex_to_bytes(hex, buf);
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_FILE_DF) + buf.size() - 1);
+    memcpy(&data[0],
+        APDU_SELECT_FILE_DF,
+        sizeof(APDU_SELECT_FILE_DF));
+    data[3] = APDU_SELECT_FILE_DF_P2_RFU_JPKI;
+    data[4] = buf.size();
+    memcpy(&data[5], &buf[0], buf.size());
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_select_jpki_cert_identity(hCard, pioSendPci, threadCtx);
+    }
+}
+
 typedef void (*apdu_api_t)(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx);
 
 static void _connect(Json::Value& threadCtx, apdu_api_t api){
 
+    std::string u8 = threadCtx["slotName"].asString();
+
     std::wstring slotName;
-    _parse_atr(threadCtx, slotName);
+    u8_to_u16(u8, slotName);
+
     LPTSTR lpszReaderName = (LPTSTR)slotName.c_str();
 
     DWORD protocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
@@ -565,9 +764,7 @@ void _sign_with_certificate_windows(Json::Value& threadCtx) {}
 
 void _get_my_certificate_windows(Json::Value& threadCtx) {
 
-    std::wstring slotName;
-    _parse_atr(threadCtx, slotName);
-    LPTSTR lpszReaderName = (LPTSTR)slotName.c_str();
+    _parse_atr(threadCtx);
 
     pki_type_t pki_type = (pki_type_t)threadCtx["type"].asInt();
 
@@ -577,7 +774,7 @@ void _get_my_certificate_windows(Json::Value& threadCtx) {
             _connect(threadCtx, _apdu_select_app_jpki_cert_identity);
             break;
         case pki_type_h:
-            _connect(threadCtx, _apdu_select_app_hpki_cert_identity);
+            //_connect(threadCtx, _apdu_select_app_hpki_cert_identity);
             break;
         default:
             break;
@@ -586,24 +783,20 @@ void _get_my_certificate_windows(Json::Value& threadCtx) {
     else {
         switch (pki_type) {
         case pki_type_j:
-            _connect(threadCtx, _apdu_select_app_jpki_cert_signature);
+            //_connect(threadCtx, _apdu_select_app_jpki_cert_signature);
             break;
         case pki_type_h:
-            _connect(threadCtx, _apdu_select_app_hpki_cert_signature);
+            //_connect(threadCtx, _apdu_select_app_hpki_cert_signature);
             break;
         default:
             break;
         }
     }
-
-    
-
 }
 
 void _get_my_number_windows(Json::Value& threadCtx) {
     
-    std::wstring slotName;
-    _parse_atr(threadCtx, slotName);
+    _parse_atr(threadCtx);
 
     pki_type_t pki_type = (pki_type_t)threadCtx["type"].asInt();
 
@@ -614,8 +807,7 @@ void _get_my_number_windows(Json::Value& threadCtx) {
 
 void _get_my_information_windows(Json::Value& threadCtx) {
 
-    std::wstring slotName;
-    _parse_atr(threadCtx, slotName);
+    _parse_atr(threadCtx);
 
     pki_type_t pki_type = (pki_type_t)threadCtx["type"].asInt();
 
@@ -667,12 +859,13 @@ void _get_slots_windows(Json::Value& threadCtx) {
     threadCtx["readers"] = slotNames;
 }
 
-static bool _parse_atr(Json::Value& threadCtx, std::wstring& slotName) {
+static bool _parse_atr(Json::Value& threadCtx) {
  
     int timeout = 3; //seconds
 
     std::string u8 = threadCtx["slotName"].asString();
 
+    std::wstring slotName;
     u8_to_u16(u8, slotName);
     
     LPTSTR lpszReaderName = (LPTSTR)slotName.c_str();
