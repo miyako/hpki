@@ -73,6 +73,10 @@ Function signwithidentity()
 	
 	$pin4:=Form:C1466.pin4File.exists ? Form:C1466.pin4File.getText() : Null:C1517
 	
+	If (Macintosh command down:C546)
+		$pin4:="9999"  //hpkiテストカード
+	End if 
+	
 	Form:C1466.hpki.sign_i({pin4: $pin4; reader: Form:C1466.readers.currentValue; file: Form:C1466.source})
 	
 	return Form:C1466
@@ -81,6 +85,10 @@ Function signwithsignature()
 	
 	$pin4:=Form:C1466.pin4File.exists ? Form:C1466.pin4File.getText() : Null:C1517
 	$pin6:=Form:C1466.pin6File.exists ? Form:C1466.pin6File.getText() : Null:C1517
+	
+	If (Macintosh command down:C546)
+		$pin4:="9999"  //hpkiテストカード
+	End if 
 	
 	Form:C1466.hpki.sign_s({pin4: $pin4; pin6: $pin6; reader: Form:C1466.readers.currentValue; file: Form:C1466.source})
 	
