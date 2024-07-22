@@ -1,3 +1,3 @@
 If (Is Windows:C1573)
-	$hpki:=cs:C1710.hpki.new().list()
+	$p:=New process:C317(Formula:C1597(setup).source; 0; "HPKI@setup")
 End if 
