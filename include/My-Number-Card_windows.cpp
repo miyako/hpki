@@ -1149,7 +1149,7 @@ static void _connect(Json::Value& threadCtx, apdu_api_t api){
     DWORD protocols = SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1;
     DWORD mode = SCARD_SHARE_SHARED;
     DWORD scope = SCARD_SCOPE_USER;
-    int timeout = 3; //seconds
+    int timeout = 1; //seconds
 
     SCARDCONTEXT hContext;
     LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
