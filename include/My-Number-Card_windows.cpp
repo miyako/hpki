@@ -1339,7 +1339,7 @@ void _get_slots_windows(Json::Value& threadCtx) {
     LONG lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
     if (lResult == SCARD_E_NO_SERVICE) {
         HANDLE hEvent = SCardAccessStartedEvent();
-        DWORD dwResult = WaitForSingleObject(hEvent, DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER);
+        DWORD dwResult = WaitForSingleObject(hEvent, DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER_1ST);
         if (dwResult == WAIT_OBJECT_0) {
             lResult = SCardEstablishContext(scope, NULL, NULL, &hContext);
         }

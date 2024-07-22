@@ -5,7 +5,8 @@
 
 #if __WINDOWS__
 #include "winscard.h"
-#define DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER 5000
+#define DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER 1000
+#define DEFAULT_TIMEOUT_MS_FOR_RESOURCE_MANAGER_1ST 10000
 #define LIBPCSC_API_TIMEOUT 100
 static bool _parse_atr(Json::Value& threadCtx);
 void u16_to_u8(std::wstring& u16, std::string& u8);
