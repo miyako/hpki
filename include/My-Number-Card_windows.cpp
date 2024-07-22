@@ -1374,7 +1374,7 @@ void _get_slots_windows(Json::Value& threadCtx) {
 
 static bool _parse_atr(Json::Value& threadCtx) {
  
-    int timeout = 3; //seconds
+    int timeout = 1; //seconds
 
     std::string u8 = threadCtx["slotName"].asString();
 
