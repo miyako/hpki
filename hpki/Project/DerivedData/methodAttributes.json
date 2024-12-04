@@ -1,13 +1,22 @@
 {
 	"methods": {
 		"TEST_hpki": {
-			"timeStamp": "2024-05-08T06:24:33Z"
+			"timeStamp": "2024-12-04T15:11:14Z"
 		},
-		"setup": {
-			"timeStamp": "2024-07-22T04:17:15Z"
+		"TEST_sign": {
+			"timeStamp": "2024-12-04T16:17:37Z"
+		},
+		"TEST_jpki": {
+			"timeStamp": "2024-12-04T16:24:11Z"
+		},
+		"(setup)": {
+			"timeStamp": "2024-12-04T15:46:35Z",
+			"attributes": {
+				"invisible": true
+			}
 		},
 		"(TEST_Worker)": {
-			"timeStamp": "2024-05-08T06:28:12Z"
+			"timeStamp": "2024-12-04T15:11:14Z"
 		}
 	}
 }

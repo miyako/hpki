@@ -2,7 +2,17 @@ Class extends _CLI
 
 Class constructor($controller : 4D:C1709.Class)
 	
-	Super:C1705("hpki"; $controller)
+	Super:C1705("hpki"; $controller=Null:C1517 ? cs:C1710._hpki_Controller : $controller)
+	
+	//This.controller.timeout:=5
+	
+Function get worker() : 4D:C1709.SystemWorker
+	
+	return This:C1470.controller.worker
+	
+Function get controller() : cs:C1710._hpki_Controller
+	
+	return This:C1470._controller
 	
 Function terminate()
 	
@@ -12,9 +22,7 @@ Function _path($item : Object) : Text
 	
 	return OB Class:C1730($item).new($item.platformPath; fk platform path:K87:2).path
 	
-Function cert_i($params : Object)->$this : cs:C1710.hpki
-	
-	$this:=This:C1470
+Function cert_i($params : Object) : Object
 	
 	var $commands; $options : Collection
 	$commands:=[]
@@ -32,9 +40,17 @@ Function cert_i($params : Object)->$this : cs:C1710.hpki
 	
 	This:C1470.controller.execute($commands)
 	
-Function cert_s($params : Object)->$this : cs:C1710.hpki
+	If (OB Instance of:C1731(This:C1470.controller; cs:C1710._hpkiUI_Controller))
+		
+	Else 
+		This:C1470.worker.wait()
+		If (This:C1470.data#"")
+			return JSON Parse:C1218(This:C1470.data; Is object:K8:27)
+		End if 
+		return {success: False:C215}
+	End if 
 	
-	$this:=This:C1470
+Function cert_s($params : Object) : Object
 	
 	var $commands; $options : Collection
 	$commands:=[]
@@ -52,9 +68,17 @@ Function cert_s($params : Object)->$this : cs:C1710.hpki
 	
 	This:C1470.controller.execute($commands)
 	
-Function sign_i($params : Object)->$this : cs:C1710.hpki
+	If (OB Instance of:C1731(This:C1470.controller; cs:C1710._hpkiUI_Controller))
+		
+	Else 
+		This:C1470.worker.wait()
+		If (This:C1470.data#"")
+			return JSON Parse:C1218(This:C1470.data; Is object:K8:27)
+		End if 
+		return {success: False:C215}
+	End if 
 	
-	$this:=This:C1470
+Function sign_i($params : Object) : Object
 	
 	var $commands; $options : Collection
 	$commands:=[]
@@ -74,9 +98,44 @@ Function sign_i($params : Object)->$this : cs:C1710.hpki
 	
 	This:C1470.controller.execute($commands)
 	
-Function sign_s($params : Object)->$this : cs:C1710.hpki
+	If (OB Instance of:C1731(This:C1470.controller; cs:C1710._hpkiUI_Controller))
+		
+	Else 
+		This:C1470.worker.wait()
+		If (This:C1470.data#"")
+			$status:=JSON Parse:C1218(This:C1470.data; Is object:K8:27)
+			If ($status.success)
+				$digestInfo:=$status.digestInfo
+				$signature:=$status.signature
+				ARRAY LONGINT:C221($pos; 0)
+				ARRAY LONGINT:C221($len; 0)
+				var $i; $n : Integer
+				var $hash : Blob
+				$i:=1
+				$n:=0
+				SET BLOB SIZE:C606($hash; Length:C16($digestInfo)/2)
+				While (Match regex:C1019("([:hex_digit:]{2})"; $digestInfo; $i; $pos; $len))
+					$hash{$n}:=Formula from string:C1601("0x"+Substring:C12($digestInfo; $pos{1}; $len{1})).call()
+					$n+=1
+					$i:=$pos{1}+$len{1}
+				End while 
+				$status._digestInfo:=$hash
+				$i:=1
+				$n:=0
+				SET BLOB SIZE:C606($hash; Length:C16($signature)/2)
+				While (Match regex:C1019("([:hex_digit:]{2})"; $signature; $i; $pos; $len))
+					$hash{$n}:=Formula from string:C1601("0x"+Substring:C12($signature; $pos{1}; $len{1})).call()
+					$n+=1
+					$i:=$pos{1}+$len{1}
+				End while 
+				$status._signature:=$hash
+			End if 
+			return $status
+		End if 
+		return {success: False:C215}
+	End if 
 	
-	$this:=This:C1470
+Function sign_s($params : Object) : Object
 	
 	var $commands; $options : Collection
 	$commands:=[]
@@ -100,9 +159,44 @@ Function sign_s($params : Object)->$this : cs:C1710.hpki
 	
 	This:C1470.controller.execute($commands)
 	
-Function mynumber($params : Object)->$this : cs:C1710.hpki
+	If (OB Instance of:C1731(This:C1470.controller; cs:C1710._hpkiUI_Controller))
+		
+	Else 
+		This:C1470.worker.wait()
+		If (This:C1470.data#"")
+			$status:=JSON Parse:C1218(This:C1470.data; Is object:K8:27)
+			If ($status.success)
+				$digestInfo:=$status.digestInfo
+				$signature:=$status.signature
+				ARRAY LONGINT:C221($pos; 0)
+				ARRAY LONGINT:C221($len; 0)
+				var $i; $n : Integer
+				var $hash : Blob
+				$i:=1
+				$n:=0
+				SET BLOB SIZE:C606($hash; Length:C16($digestInfo)/2)
+				While (Match regex:C1019("([:hex_digit:]{2})"; $digestInfo; $i; $pos; $len))
+					$hash{$n}:=Formula from string:C1601("0x"+Substring:C12($digestInfo; $pos{1}; $len{1})).call()
+					$n+=1
+					$i:=$pos{1}+$len{1}
+				End while 
+				$status._digestInfo:=$hash
+				$i:=1
+				$n:=0
+				SET BLOB SIZE:C606($hash; Length:C16($signature)/2)
+				While (Match regex:C1019("([:hex_digit:]{2})"; $signature; $i; $pos; $len))
+					$hash{$n}:=Formula from string:C1601("0x"+Substring:C12($signature; $pos{1}; $len{1})).call()
+					$n+=1
+					$i:=$pos{1}+$len{1}
+				End while 
+				$status._signature:=$hash
+			End if 
+			return $status
+		End if 
+		return {success: False:C215}
+	End if 
 	
-	$this:=This:C1470
+Function mynumber($params : Object) : Text
 	
 	var $commands; $options : Collection
 	$commands:=[]
@@ -119,9 +213,17 @@ Function mynumber($params : Object)->$this : cs:C1710.hpki
 	
 	This:C1470.controller.execute($commands)
 	
-Function list()->$this : cs:C1710.hpki
+	If (OB Instance of:C1731(This:C1470.controller; cs:C1710._hpkiUI_Controller))
+		
+	Else 
+		This:C1470.worker.wait()
+		If (This:C1470.data#"")
+			return JSON Parse:C1218(This:C1470.data; Is object:K8:27)
+		End if 
+		return {success: False:C215}
+	End if 
 	
-	$this:=This:C1470
+Function list() : Object
 	
 	var $commands; $options : Collection
 	$commands:=[]
@@ -130,4 +232,14 @@ Function list()->$this : cs:C1710.hpki
 	
 	$commands.push($command)
 	
-	This:C1470.controller.execute($commands)
+	This:C1470.controller.init().execute($commands)
+	
+	If (OB Instance of:C1731(This:C1470.controller; cs:C1710._hpkiUI_Controller))
+		
+	Else 
+		This:C1470.worker.wait()
+		If (This:C1470.data#"")
+			return JSON Parse:C1218(This:C1470.data; Is object:K8:27)
+		End if 
+		return {success: False:C215}
+	End if 

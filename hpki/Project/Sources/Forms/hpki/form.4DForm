@@ -197,8 +197,8 @@
 					"type": "checkbox",
 					"text": "Folder(fk home folder).file(\"pin4\").exists",
 					"top": 392,
-					"left": 175,
-					"width": 291,
+					"left": 275,
+					"width": 251,
 					"height": 32,
 					"events": [
 						"onClick"
@@ -227,8 +227,8 @@
 					"type": "checkbox",
 					"text": "Folder(fk home folder).file(\"pin6\").exists",
 					"top": 392,
-					"left": 493,
-					"width": 291,
+					"left": 533,
+					"width": 251,
 					"height": 32,
 					"events": [
 						"onClick"
@@ -480,6 +480,34 @@
 					"fontWeight": "bold",
 					"sizingY": "move",
 					"sizingX": "fixed"
+				},
+				"Check Box2": {
+					"type": "checkbox",
+					"text": "Folder(fk home folder).file(\"hpki\").exists",
+					"top": 392,
+					"left": 15,
+					"width": 251,
+					"height": 32,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"enterable": false,
+					"focusable": false,
+					"dataSource": "Form:C1466.hpkiFile.exists"
+				},
+				"Check Box3": {
+					"type": "checkbox",
+					"text": "医師会カード",
+					"top": 46,
+					"left": 275,
+					"width": 142,
+					"height": 24,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.医師会カード"
 				}
 			}
 		},
@@ -537,7 +565,7 @@
 		}
 	],
 	"method": "method.4dm",
-	"geometryStamp": 1206,
+	"geometryStamp": 1236,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

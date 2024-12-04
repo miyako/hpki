@@ -17,7 +17,10 @@ Function onLoad()
 	
 	Form:C1466.readers:={values: []; index: -1; currentValue: Null:C1517}
 	
-	Form:C1466.list().getSecrets()
+	Form:C1466.医師会カード:=False:C215
+	
+	Form:C1466.list()
+	Form:C1466.getSecrets()
 	
 Function onUnload()
 	
@@ -36,6 +39,9 @@ Function getSecrets()
 	
 	//ここに6+桁暗証番号を保存している前提
 	Form:C1466.pin6File:=Folder:C1567(fk home folder:K87:24).file("pin6")
+	
+	//ここに4桁暗証番号を保存している前提
+	Form:C1466.hpkiFile:=Folder:C1567(fk home folder:K87:24).file("hpki")
 	
 	OBJECT SET ENABLED:C1123(*; "@で署名"; False:C215)
 	
@@ -71,10 +77,10 @@ Function readsignaturecertificate()
 	
 Function signwithidentity()
 	
-	$pin4:=Form:C1466.pin4File.exists ? Form:C1466.pin4File.getText() : Null:C1517
-	
-	If (Macintosh command down:C546)
-		$pin4:="9999"  //hpkiテストカード
+	If (Form:C1466.医師会カード)
+		$pin4:=Form:C1466.hpkiFile.exists ? Form:C1466.hpkiFile.getText() : Null:C1517
+	Else 
+		$pin4:=Form:C1466.pin4File.exists ? Form:C1466.pin4File.getText() : Null:C1517
 	End if 
 	
 	Form:C1466.hpki.sign_i({pin4: $pin4; reader: Form:C1466.readers.currentValue; file: Form:C1466.source})
@@ -83,11 +89,12 @@ Function signwithidentity()
 	
 Function signwithsignature()
 	
-	$pin4:=Form:C1466.pin4File.exists ? Form:C1466.pin4File.getText() : Null:C1517
 	$pin6:=Form:C1466.pin6File.exists ? Form:C1466.pin6File.getText() : Null:C1517
 	
-	If (Macintosh command down:C546)
-		$pin4:="9999"  //hpkiテストカード
+	If (Form:C1466.医師会カード)
+		$pin4:=Form:C1466.hpkiFile.exists ? Form:C1466.hpkiFile.getText() : Null:C1517
+	Else 
+		$pin4:=Form:C1466.pin4File.exists ? Form:C1466.pin4File.getText() : Null:C1517
 	End if 
 	
 	Form:C1466.hpki.sign_s({pin4: $pin4; pin6: $pin6; reader: Form:C1466.readers.currentValue; file: Form:C1466.source})
