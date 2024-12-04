@@ -18,6 +18,7 @@ void asn_time_to_iso(ASN1_TIME *asn_time, std::string& str);
 
 #define ID_HPKI "004e0000f781d100"
 #define ID_JPKI "000041e0b381a100"
+#define ID_JGID "000005e0b381a100"
 
 #define NAME_HPKI "HPKI"
 #define NAME_JPKI "JPKI"

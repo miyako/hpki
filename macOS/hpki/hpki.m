@@ -238,6 +238,9 @@ int hpki(int argc, char *argv[]) {
         if(historicalBytes == ID_JPKI) {
             threadCtx["cardType"] = NAME_JPKI;
         }
+        if(historicalBytes == ID_JGID) {
+            threadCtx["cardType"] = NAME_JPKI;
+        }
         threadCtx.removeMember("historicalBytes");
     }
     
