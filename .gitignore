@@ -4,3 +4,4 @@ windows/hpki/x64/*
 windows/hpki/hpki.pdb
 hpki/Data/*
 hpki/userPreferences.*
+hpki/Project/DerivedData*
