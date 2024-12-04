@@ -1545,6 +1545,9 @@ static pki_type_t _get_pki_type(Json::Value& threadCtx) {
         if(historicalBytes == ID_JPKI) {
             return pki_type_j;
         }
+        if (historicalBytes == ID_JGID) {
+            return pki_type_j;
+        }
     }
     
     return pki_type_unknown;
