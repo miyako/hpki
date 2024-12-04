@@ -3,13 +3,19 @@
 [![license](https://img.shields.io/github/license/miyako/4d-class-hpki)](LICENSE)
 ![downloads](https://img.shields.io/github/downloads/miyako/4d-class-hpki/total)
 
-**注記**: コマンドラインツール`hpki`は4Dに依存しません。
+# `hpki`
 
-<img style="height:400px;width:auto" src="https://github.com/miyako/4d-class-hpki/assets/1725068/997735ed-295f-42ec-b3c3-df2fcc4cd8b5" />
+## dependencies.json
 
-# 4d-class-hpki
-
-## `hpki`
+ ```json
+{
+    "dependencies": {
+        "hpki": {
+            "github": "miyako/hpki",
+            "version": "*"
+        }
+    }
+}
 
 マイナンバーカードまたは日本医師会認証局のICカードを使用するためのツール
 
