@@ -79,6 +79,7 @@ return 0;
         bool signWithCertificateIdentity = false;
         int inputIsStream = true;
         int outputIsStream = true;
+        hash_algorithm algorithm = hash_algorithm_sha256;
 
         while ((opt = getopt_long(argc, argv, OPT_LIST, longopts, &longoptind)) != -1)
         {
@@ -208,7 +209,7 @@ return 0;
                     DIGEST_INFO = DIGEST_INFO_1;
                     md = EVP_sha1();
                     DIGEST_INFO_start = 15;
-                    sha = SHA1
+                    sha = SHA1;
                     break;
                 case hash_algorithm_sha512:
                     DIGEST_INFO_size = sizeof(DIGEST_INFO_512);
