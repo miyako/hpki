@@ -35,7 +35,7 @@ Function onResponse($worker : 4D:C1709.SystemWorker; $params : Object)
 				For each ($prop; ["myNumber"; \
 					"address"; "commonName"; "gender"; "dateOfBirth"; \
 					"cardType"; \
-					"version"; "subject"; "serialNumber"; "pem"; "der"; "issuer"; "notAfter"; "notBefore"; "digestInfo"; "signature"])
+					"version"; "subject"; "serialNumber"; "pem"; "der"; "issuer"; "notAfter"; "notBefore"; "digestInfo"; "signature"; "signature_base64"])
 					If ($response[$prop]#Null:C1517)
 						Form:C1466[$prop]:=$response[$prop]
 					End if 
@@ -48,6 +48,8 @@ Function onResponse($worker : 4D:C1709.SystemWorker; $params : Object)
 				
 				Form:C1466.医師会カード:=Bool:C1537(Form:C1466.cardType="HPKI")
 				
+			Else 
+				Form:C1466.statusCode:=$response.response
 			End if 
 		End if 
 	End if 

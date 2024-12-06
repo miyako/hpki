@@ -147,37 +147,19 @@ static void _apdu_compute_digital_signature_jpki(dispatch_semaphore_t sem,
                                                  TKSmartCard *smartCard,
                                                  Json::Value& threadCtx) {
     
-    std::vector<uint8_t>data(sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
-    memcpy(&data[0],
-           APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI,
-           sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
-    std::string digestInfo = threadCtx["digestInfo"].asString();
-    std::vector<uint8_t>buf(0);
-    hex_to_bytes(digestInfo, buf);
-    data[4] = buf.size();
-    memcpy(&data[5], &buf[0], buf.size());
-    [smartCard
-     transmitRequest:[NSData dataWithBytes:&data[0]
-                                    length:data.size()]
-     reply:^(NSData *response, NSError *error) {
-        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
-            size_t signature_length = [response length] -2;
-            std::vector<uint8_t>buf(signature_length);
-            [response getBytes:&buf[0] range:NSMakeRange(0, signature_length)];
-            std::string hex;
-            bytes_to_hex(&buf[0], signature_length, hex);
-            threadCtx["signature"] = hex;
-            threadCtx["success"] = true;
-            _end_session(sem, smartCard, threadCtx);
-        }else{
-            _end_session(sem, smartCard, threadCtx);
-        }
-    }];
-}
-
-static void _apdu_compute_digital_signature_hpki(dispatch_semaphore_t sem,
-                                                 TKSmartCard *smartCard,
-                                                 Json::Value& threadCtx) {
+    hash_algorithm algorithm = (hash_algorithm)threadCtx["algorithm"].asInt();
+    size_t APDU_size;
+    switch (algorithm) {
+        case hash_algorithm_sha512:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
+            break;
+        case hash_algorithm_sha1:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
+            break;
+        default:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x20;
+            break;
+    }
     
     std::vector<uint8_t>data(sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
     memcpy(&data[0],
@@ -190,7 +172,7 @@ static void _apdu_compute_digital_signature_hpki(dispatch_semaphore_t sem,
     memcpy(&data[5], &buf[0], buf.size());
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
-                                    length:data.size()]
+                                    length:APDU_size]
      reply:^(NSData *response, NSError *error) {
         if ((error == nil) && (_is_response_positive(response, threadCtx))) {
             size_t signature_length = [response length] -2;
@@ -199,6 +181,59 @@ static void _apdu_compute_digital_signature_hpki(dispatch_semaphore_t sem,
             std::string hex;
             bytes_to_hex(&buf[0], signature_length, hex);
             threadCtx["signature"] = hex;
+            std::string b64;
+            bytes_to_b64(&buf[0], signature_length, b64);
+            threadCtx["signature_base64"] = b64;
+            threadCtx["success"] = true;
+            _end_session(sem, smartCard, threadCtx);
+        }else{
+            _end_session(sem, smartCard, threadCtx);
+        }
+    }];
+}
+
+static void _apdu_compute_digital_signature_hpki(dispatch_semaphore_t sem,
+                                                 TKSmartCard *smartCard,
+                                                 Json::Value& threadCtx) {
+    
+    hash_algorithm algorithm = (hash_algorithm)threadCtx["algorithm"].asInt();
+    size_t APDU_size;
+    switch (algorithm) {
+        case hash_algorithm_sha512:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
+            break;
+        case hash_algorithm_sha1:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
+            break;
+        default:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x20;
+            break;
+    }
+    
+    std::vector<uint8_t>data(sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
+    memcpy(&data[0],
+           APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI,
+           sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
+    std::string digestInfo = threadCtx["digestInfo"].asString();
+    std::vector<uint8_t>buf(0);
+    hex_to_bytes(digestInfo, buf);
+    data[4] = buf.size();
+        
+    memcpy(&data[5], &buf[0], buf.size());
+    [smartCard
+     transmitRequest:[NSData dataWithBytes:&data[0]
+                                    length:APDU_size]
+     reply:^(NSData *response, NSError *error) {
+        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
+            size_t signature_length = [response length] -2;
+            std::vector<uint8_t>buf(signature_length);
+            [response getBytes:&buf[0] range:NSMakeRange(0, signature_length)];
+            std::string hex;
+            bytes_to_hex(&buf[0], signature_length, hex);
+            threadCtx["signature"] = hex;
+            std::string b64;
+            bytes_to_b64(&buf[0], signature_length, b64);
+            threadCtx["signature_base64"] = b64;
             threadCtx["success"] = true;
             _end_session(sem, smartCard, threadCtx);
         }else{

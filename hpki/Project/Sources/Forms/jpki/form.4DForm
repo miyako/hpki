@@ -420,19 +420,20 @@
 				},
 				"digestInfo": {
 					"type": "input",
-					"left": 467,
+					"left": 107,
 					"top": 467,
 					"width": 137,
-					"height": 37,
+					"height": 33,
 					"dataSource": "Form:C1466.digestInfo",
 					"enterable": false,
-					"sizingX": "grow"
+					"sizingX": "fixed",
+					"sizingY": "grow"
 				},
 				"path:14": {
 					"type": "text",
 					"text": "署名ハッシュ:",
 					"top": 467,
-					"left": 368,
+					"left": 8,
 					"width": 86,
 					"height": 16,
 					"textAlign": "right",
@@ -442,21 +443,21 @@
 				},
 				"signature": {
 					"type": "input",
-					"left": 467,
-					"top": 512,
+					"left": 307,
+					"top": 467,
 					"width": 137,
-					"height": 37,
+					"height": 33,
 					"dataSource": "Form:C1466.signature",
 					"enterable": false,
-					"sizingX": "grow",
+					"sizingX": "fixed",
 					"sizingY": "grow"
 				},
 				"path:15": {
 					"type": "text",
 					"text": "署名:",
-					"top": 512,
-					"left": 388,
-					"width": 66,
+					"top": 467,
+					"left": 248,
+					"width": 46,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
@@ -497,8 +498,8 @@
 					"type": "input",
 					"left": 107,
 					"top": 387,
-					"width": 203,
-					"height": 161,
+					"width": 137,
+					"height": 57,
 					"dataSource": "Form:C1466.data",
 					"events": [
 						"onAfterEdit"
@@ -516,6 +517,79 @@
 					"fontWeight": "bold",
 					"sizingY": "fixed",
 					"sizingX": "fixed"
+				},
+				"SHA1": {
+					"type": "radio",
+					"text": "SHA1",
+					"top": 432,
+					"left": 329,
+					"width": 71,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA1",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"SHA2": {
+					"type": "radio",
+					"text": "SHA256",
+					"top": 432,
+					"left": 409,
+					"width": 91,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA256",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"SHA5": {
+					"type": "radio",
+					"text": "SHA512",
+					"top": 432,
+					"left": 509,
+					"width": 91,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA512",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"statusCode": {
+					"type": "input",
+					"left": 495,
+					"top": 16,
+					"width": 109,
+					"height": 17,
+					"dataSource": "Form:C1466.statusCode",
+					"enterable": false,
+					"focusable": true,
+					"contextMenu": "none",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"stroke": "#ff0000",
+					"sizingX": "move",
+					"fontWeight": "bold",
+					"textAlign": "right"
+				},
+				"signature_base64": {
+					"type": "input",
+					"left": 463,
+					"top": 467,
+					"width": 137,
+					"height": 33,
+					"dataSource": "Form:C1466.signature_base64",
+					"enterable": false,
+					"sizingX": "grow",
+					"sizingY": "grow"
 				}
 			}
 		},
@@ -573,7 +647,7 @@
 		}
 	],
 	"method": "method.4dm",
-	"geometryStamp": 1566,
+	"geometryStamp": 1678,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

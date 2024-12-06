@@ -89,6 +89,10 @@ Function sign_i($params : Object) : Object
 		$command+=" --pin4 "+This:C1470.escape($params.pin4)
 	End if 
 	
+	If ($params.algorithm#Null:C1517) && (Value type:C1509($params.algorithm)=Is text:K8:3)
+		$command+=" --algorithm "+This:C1470.escape($params.algorithm)
+	End if 
+	
 	If ($params.reader#Null:C1517) && (Value type:C1509($params.reader)=Is text:K8:3)
 		
 		Case of 
@@ -165,6 +169,10 @@ Function sign_s($params : Object) : Object
 	
 	If ($params.pin6#Null:C1517) && (Value type:C1509($params.pin6)=Is text:K8:3)
 		$command+=" --pin6 "+This:C1470.escape($params.pin6)
+	End if 
+	
+	If ($params.algorithm#Null:C1517) && (Value type:C1509($params.algorithm)=Is text:K8:3)
+		$command+=" --algorithm "+This:C1470.escape($params.algorithm)
 	End if 
 	
 	If ($params.reader#Null:C1517) && (Value type:C1509($params.reader)=Is text:K8:3)

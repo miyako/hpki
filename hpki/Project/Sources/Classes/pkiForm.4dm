@@ -2,6 +2,7 @@ Class extends _Form
 
 property data : Variant
 property 医師会カード : Boolean
+property algorithm : Text
 
 Class constructor
 	
@@ -16,8 +17,23 @@ Function onLoad()
 	Form:C1466.data:=Null:C1517
 	Form:C1466.医師会カード:=False:C215
 	
+	Form:C1466.SHA1:=False:C215
+	Form:C1466.SHA256:=True:C214
+	Form:C1466.SHA512:=False:C215
+	
 	Form:C1466.list()
 	Form:C1466.getSecrets()
+	
+Function get algorithm : Text
+	
+	Case of 
+		: (Form:C1466.SHA1)
+			return "sha1"
+		: (Form:C1466.SHA512)
+			return "sha512"
+		Else 
+			return "sha256"
+	End case 
 	
 Function onUnload()
 	
@@ -46,7 +62,7 @@ Function getSecrets()
 	
 Function clear()
 	
-	For each ($prop; ["myNumber"; "address"; "commonName"; "gender"; "dateOfBirth"; "cardType"; "version"; "subject"; "serialNumber"; "pem"; "der"; "issuer"; "notAfter"; "notBefore"; "digestInfo"; "signature"])
+	For each ($prop; ["myNumber"; "address"; "commonName"; "gender"; "dateOfBirth"; "cardType"; "version"; "subject"; "serialNumber"; "pem"; "der"; "issuer"; "notAfter"; "notBefore"; "digestInfo"; "signature"; "signature_base64"; "statusCode"])
 		Form:C1466[$prop]:=Null:C1517
 	End for each 
 	
@@ -84,7 +100,7 @@ Function signwithidentity()
 		$pin4:=Form:C1466.pin4File.exists ? Form:C1466.pin4File.getText() : Null:C1517
 	End if 
 	
-	Form:C1466.hpki.sign_i({pin4: $pin4; reader: Form:C1466.readers.currentValue; file: Form:C1466.getData()})
+	Form:C1466.hpki.sign_i({pin4: $pin4; reader: Form:C1466.readers.currentValue; file: Form:C1466.getData(); algorithm: Form:C1466.algorithm})
 	
 	return Form:C1466
 	
@@ -98,7 +114,7 @@ Function signwithsignature()
 		$pin4:=Form:C1466.pin4File.exists ? Form:C1466.pin4File.getText() : Null:C1517
 	End if 
 	
-	Form:C1466.hpki.sign_s({pin4: $pin4; pin6: $pin6; reader: Form:C1466.readers.currentValue; file: Form:C1466.getData()})
+	Form:C1466.hpki.sign_s({pin4: $pin4; pin6: $pin6; reader: Form:C1466.readers.currentValue; file: Form:C1466.getData(); algorithm: Form:C1466.algorithm})
 	
 	return Form:C1466
 	

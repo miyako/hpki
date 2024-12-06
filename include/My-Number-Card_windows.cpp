@@ -838,6 +838,20 @@ static void _apdu_select_app_jpki_cert_signature(SCARDHANDLE hCard, const SCARD_
 
 static void _apdu_compute_digital_signature_jpki(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
+    hash_algorithm algorithm = (hash_algorithm)threadCtx["algorithm"].asInt();
+    size_t APDU_size;
+    switch (algorithm) {
+        case hash_algorithm_sha512:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
+            break;
+        case hash_algorithm_sha1:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
+            break;
+        default:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x20;
+            break;
+    }
+    
     std::vector<uint8_t>data(sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
     memcpy(&data[0],
         APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI,
@@ -849,7 +863,7 @@ static void _apdu_compute_digital_signature_jpki(SCARDHANDLE hCard, const SCARD_
     memcpy(&data[5], &buf[0], buf.size());
 
     LPCBYTE pbSendBuffer = &data[0];
-    DWORD cbSendLength = data.size();
+    DWORD cbSendLength = APDU_size;
     BYTE pbRecvBuffer[258];
     DWORD cbRecvLength = sizeof(pbRecvBuffer);
 
@@ -873,6 +887,9 @@ static void _apdu_compute_digital_signature_jpki(SCARDHANDLE hCard, const SCARD_
         std::string hex;
         bytes_to_hex(&buf[0], signature_length, hex);
         threadCtx["signature"] = hex;
+        std::string b64;
+        bytes_to_b64(&buf[0], signature_length, b64);
+        threadCtx["signature_base64"] = b64;
         threadCtx["success"] = true;
     }
 
@@ -945,6 +962,20 @@ static void _apdu_select_app_jpki_compute_digital_signature_identity(SCARDHANDLE
 
 static void _apdu_compute_digital_signature_hpki(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
+    hash_algorithm algorithm = (hash_algorithm)threadCtx["algorithm"].asInt();
+    size_t APDU_size;
+    switch (algorithm) {
+        case hash_algorithm_sha512:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
+            break;
+        case hash_algorithm_sha1:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
+            break;
+        default:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x20;
+            break;
+    }
+    
     std::vector<uint8_t>data(sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
     memcpy(&data[0],
         APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI,
@@ -956,7 +987,7 @@ static void _apdu_compute_digital_signature_hpki(SCARDHANDLE hCard, const SCARD_
     memcpy(&data[5], &buf[0], buf.size());
 
     LPCBYTE pbSendBuffer = &data[0];
-    DWORD cbSendLength = data.size();
+    DWORD cbSendLength = APDU_size;
     BYTE pbRecvBuffer[258];
     DWORD cbRecvLength = sizeof(pbRecvBuffer);
 
@@ -980,6 +1011,9 @@ static void _apdu_compute_digital_signature_hpki(SCARDHANDLE hCard, const SCARD_
         std::string hex;
         bytes_to_hex(&buf[0], signature_length, hex);
         threadCtx["signature"] = hex;
+        std::string b64;
+        bytes_to_b64(&buf[0], signature_length, b64);
+        threadCtx["signature_base64"] = b64;
         threadCtx["success"] = true;
     }
 

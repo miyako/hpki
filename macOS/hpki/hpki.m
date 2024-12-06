@@ -51,6 +51,7 @@ static void usage(void) {
     fprintf(stderr, "-m, --mynumber: print personal identification number\n");
     fprintf(stderr, "-i, --myinfo: print basic personal information\n");
     fprintf(stderr, "-l, --list: print scard readers\n");
+    fprintf(stderr, "-a, --algorithm: digest info hash algorithm (sha1,sha256,sha512)\n");
     fprintf(stderr, "-v, --version: show version information\n");
 
     exit(1);
@@ -78,6 +79,7 @@ int hpki(int argc, char *argv[]) {
     bool signWithCertificateIdentity = false;
     int inputIsStream = true;
     int outputIsStream = true;
+    hash_algorithm algorithm = hash_algorithm_sha256;
     
     while ((opt = getopt_long(argc, argv, OPT_LIST, longopts, &longoptind)) != -1)
     {
@@ -86,6 +88,18 @@ int hpki(int argc, char *argv[]) {
             case 'o':
                 output = (optarg);
                 outputIsStream = false;
+                break;
+            case 'a':
+                type = (optarg);
+                if(type == "sha1"){
+                    algorithm = hash_algorithm_sha1;
+                }
+                if(type == "sha256"){
+                    algorithm = hash_algorithm_sha256;
+                }
+                if(type == "sha512"){
+                    algorithm = hash_algorithm_sha512;
+                }
                 break;
             case 'c':
                 type = (optarg);
@@ -182,19 +196,49 @@ int hpki(int argc, char *argv[]) {
             fclose(fp);
         }
         
-        std::vector<uint8_t>digestInfo(sizeof(DIGEST_INFO));
+        int DIGEST_INFO_size;
+        const void *DIGEST_INFO;
+        const EVP_MD *md;
+        size_t DIGEST_INFO_start;
+        unsigned char *(*sha)(const unsigned char*, size_t, unsigned char*);
+        
+        switch(algorithm) {
+            case hash_algorithm_sha1:
+                DIGEST_INFO_size = sizeof(DIGEST_INFO_1);
+                DIGEST_INFO = DIGEST_INFO_1;
+                md = EVP_sha1();
+                DIGEST_INFO_start = 15;
+                sha = SHA1;
+                break;
+            case hash_algorithm_sha512:
+                DIGEST_INFO_size = sizeof(DIGEST_INFO_512);
+                DIGEST_INFO = DIGEST_INFO_512;
+                md = EVP_sha512();
+                DIGEST_INFO_start = 19;
+                sha = SHA512;
+                break;
+            default:
+                DIGEST_INFO_size = sizeof(DIGEST_INFO_256);
+                DIGEST_INFO = DIGEST_INFO_256;
+                md = EVP_sha256();
+                DIGEST_INFO_start = 19;
+                sha = SHA256;
+                break;
+        }
+        
+        std::vector<uint8_t>digestInfo(DIGEST_INFO_size);
         memcpy(&digestInfo[0],
                DIGEST_INFO,
-               sizeof(DIGEST_INFO));
+               DIGEST_INFO_size);
         
-        const EVP_MD *md = EVP_sha256();
-        uint8_t *_buf = &digestInfo[19];
-        SHA256((unsigned char *)buf, i, _buf);
+        uint8_t *_buf = &digestInfo[DIGEST_INFO_start];
+        sha((unsigned char *)buf, i, _buf);
         free(buf);
 
         bytes_to_hex(&digestInfo[0], digestInfo.size(), hex);
 
         threadCtx["digestInfo"] = hex;
+        threadCtx["algorithm"] = algorithm;
     }
     
     if(signWithCertificateSignature) {

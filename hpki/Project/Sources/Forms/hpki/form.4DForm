@@ -268,51 +268,6 @@
 					"sizingX": "move",
 					"sizingY": "fixed"
 				},
-				"digestInfo": {
-					"type": "input",
-					"left": 467,
-					"top": 427,
-					"width": 137,
-					"height": 37,
-					"dataSource": "Form:C1466.digestInfo",
-					"enterable": false,
-					"sizingX": "grow"
-				},
-				"path:14": {
-					"type": "text",
-					"text": "署名ハッシュ:",
-					"top": 427,
-					"left": 368,
-					"width": 86,
-					"height": 16,
-					"textAlign": "right",
-					"fontWeight": "bold",
-					"sizingY": "fixed",
-					"sizingX": "fixed"
-				},
-				"signature": {
-					"type": "input",
-					"left": 467,
-					"top": 472,
-					"width": 137,
-					"height": 37,
-					"dataSource": "Form:C1466.signature",
-					"enterable": false,
-					"sizingX": "grow",
-					"sizingY": "grow"
-				},
-				"path:15": {
-					"type": "text",
-					"text": "署名:",
-					"top": 472,
-					"left": 388,
-					"width": 66,
-					"height": 16,
-					"textAlign": "right",
-					"fontWeight": "bold",
-					"sizingY": "fixed",
-					"sizingX": "fixed"
-				},
 				"Text": {
 					"type": "text",
 					"text": "パスコードの場所:",
@@ -343,12 +298,44 @@
 					"startPoint": "topLeft",
 					"sizingX": "grow"
 				},
+				"Check Box2": {
+					"type": "checkbox",
+					"text": "Folder(fk home folder).file(\"hpki\")",
+					"top": 46,
+					"left": 128,
+					"width": 231,
+					"height": 32,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"enterable": false,
+					"focusable": false,
+					"dataSource": "Form:C1466.hpkiFile.exists"
+				},
+				"statusCode": {
+					"type": "input",
+					"left": 495,
+					"top": 16,
+					"width": 109,
+					"height": 17,
+					"dataSource": "Form:C1466.statusCode",
+					"enterable": false,
+					"focusable": true,
+					"contextMenu": "none",
+					"fill": "transparent",
+					"borderStyle": "none",
+					"stroke": "#ff0000",
+					"sizingX": "move",
+					"fontWeight": "bold",
+					"textAlign": "right"
+				},
 				"data": {
 					"type": "input",
 					"left": 107,
 					"top": 387,
-					"width": 203,
-					"height": 121,
+					"width": 137,
+					"height": 57,
 					"dataSource": "Form:C1466.data",
 					"events": [
 						"onAfterEdit"
@@ -367,20 +354,107 @@
 					"sizingY": "fixed",
 					"sizingX": "fixed"
 				},
-				"Check Box2": {
-					"type": "checkbox",
-					"text": "Folder(fk home folder).file(\"hpki\")",
-					"top": 46,
-					"left": 128,
-					"width": 231,
-					"height": 32,
+				"SHA1": {
+					"type": "radio",
+					"text": "SHA1",
+					"top": 432,
+					"left": 329,
+					"width": 71,
+					"height": 25,
 					"events": [
 						"onClick"
 					],
 					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA1",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"SHA2": {
+					"type": "radio",
+					"text": "SHA256",
+					"top": 432,
+					"left": 409,
+					"width": 91,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA256",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"SHA5": {
+					"type": "radio",
+					"text": "SHA512",
+					"top": 432,
+					"left": 509,
+					"width": 91,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA512",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"digestInfo": {
+					"type": "input",
+					"left": 107,
+					"top": 467,
+					"width": 137,
+					"height": 33,
+					"dataSource": "Form:C1466.digestInfo",
 					"enterable": false,
-					"focusable": false,
-					"dataSource": "Form:C1466.hpkiFile.exists"
+					"sizingX": "fixed",
+					"sizingY": "grow"
+				},
+				"path:14": {
+					"type": "text",
+					"text": "署名ハッシュ:",
+					"top": 467,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "fixed",
+					"sizingX": "fixed"
+				},
+				"signature": {
+					"type": "input",
+					"left": 307,
+					"top": 467,
+					"width": 137,
+					"height": 33,
+					"dataSource": "Form:C1466.signature",
+					"enterable": false,
+					"sizingX": "fixed",
+					"sizingY": "grow"
+				},
+				"path:15": {
+					"type": "text",
+					"text": "署名:",
+					"top": 467,
+					"left": 248,
+					"width": 46,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "fixed",
+					"sizingX": "fixed"
+				},
+				"signature_base64": {
+					"type": "input",
+					"left": 463,
+					"top": 467,
+					"width": 137,
+					"height": 33,
+					"dataSource": "Form:C1466.signature_base64",
+					"enterable": false,
+					"sizingX": "grow",
+					"sizingY": "grow"
 				}
 			}
 		},
@@ -438,7 +512,7 @@
 		}
 	],
 	"method": "method.4dm",
-	"geometryStamp": 1595,
+	"geometryStamp": 1611,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

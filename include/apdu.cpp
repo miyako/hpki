@@ -36,6 +36,52 @@ void asn_time_to_iso(ASN1_TIME *asn_time, std::string& str) {
     }
 }
 
+static const char b64_table[65] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+void bytes_to_b64(const uint8_t *pbtData, const size_t szBytes, std::string &b64) {
+        
+    const ::std::size_t binlen = szBytes;
+    
+    ::std::size_t olen = (((binlen + 2) / 3) * 4);
+    
+//    if(fold)
+//    {
+//        olen += olen / 72; /* account for line feeds */
+//    }
+
+    // Use = signs so the end is properly padded.
+    std::string retval(olen, '=');
+    
+    ::std::size_t outpos = 0;
+    ::std::size_t line_len = 0;
+    int bits_collected = 0;
+    unsigned int accumulator = 0;
+        
+    for (size_t i = 0; i < szBytes; ++i) {
+        accumulator = (accumulator << 8) | (pbtData[i] & 0xffu);
+        bits_collected += 8;
+        while (bits_collected >= 6) {
+            bits_collected -= 6;
+            retval[outpos++] = b64_table[(accumulator >> bits_collected) & 0x3fu];
+//            if(fold)
+//            {
+//                line_len++;
+//                if (line_len >= 72) {
+//                    retval[outpos++] = '\n';
+//                    line_len = 0;
+//                }
+//            }
+        }
+    }
+    
+    if (bits_collected > 0) { // Any trailing bits that are missing.
+        accumulator <<= 6 - bits_collected;
+        retval[outpos++] = b64_table[accumulator & 0x3fu];
+    }
+    
+    b64 = retval;
+}
+    
 void bytes_to_hex(const uint8_t *pbtData, const size_t szBytes, std::string &hex) {
     
     std::vector<uint8_t> buf((szBytes * 2) + 1);
