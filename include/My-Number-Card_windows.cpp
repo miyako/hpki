@@ -1,4 +1,4 @@
-#include "My-Number-Card_windows.h"
+#include "My-Number-Card.h"
 
 #pragma mark デバイス
 
