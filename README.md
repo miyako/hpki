@@ -5,6 +5,8 @@
 
 # `hpki`
 
+マイナンバーカードまたは日本医師会認証局のICカードを使用するためのツール
+
 ## dependencies.json
 
  ```json
@@ -18,7 +20,7 @@
 }
 ```
 
-マイナンバーカードまたは日本医師会認証局のICカードを使用するためのツール
+<img src="https://github.com/user-attachments/assets/ba8c3d25-a2c6-43f0-ad40-ead147cec963" width=600 height=auto />
 
 ```
 usage: hpki [options...]
