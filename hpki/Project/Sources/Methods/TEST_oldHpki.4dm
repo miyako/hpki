@@ -7,6 +7,6 @@ If (Count parameters:C259=0)
 	
 Else 
 	
-	$form:=cs:C1710.jpkiForm.new()
+	$form:=cs:C1710.oldHpkiForm.new()
 	
 End if 

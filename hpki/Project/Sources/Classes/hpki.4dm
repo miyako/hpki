@@ -89,14 +89,31 @@ Function sign_i($params : Object) : Object
 		$command+=" --pin4 "+This:C1470.escape($params.pin4)
 	End if 
 	
-	If ($params.reader#Null:C1517) && (Value type:C1509($params.reader)=Is text:K8:3)\
-		 && ($params.file#Null:C1517) && (OB Instance of:C1731($params.file; 4D:C1709.File)) && ($params.file.exists)
-		$command+=" --reader "+This:C1470.escape($params.reader)
-		$command+=" "+This:C1470.escape(This:C1470._path($params.file))
-		$commands.push($command)
+	If ($params.reader#Null:C1517) && (Value type:C1509($params.reader)=Is text:K8:3)
+		
+		Case of 
+			: (Value type:C1509($params.file)=Is object:K8:27) && ($params.file#Null:C1517) && (OB Instance of:C1731($params.file; 4D:C1709.File)) && ($params.file.exists)
+				
+				$command+=" --reader "+This:C1470.escape($params.reader)
+				$command+=" "+This:C1470.escape(This:C1470._path($params.file))
+				$commands.push($command)
+				
+				This:C1470.controller.execute($commands)
+				
+			: ((Value type:C1509($params.file)=Is text:K8:3) && ($params.file#"")) || \
+				((Value type:C1509($params.file)=Is BLOB:K8:12) && (BLOB size:C605($params.file#0))) || \
+				((Value type:C1509($params.file)=Is object:K8:27) && ($params.file.length#0))
+				
+				$command+=" --reader "+This:C1470.escape($params.reader)
+				$commands.push($command)
+				
+				This:C1470.controller.execute($commands)
+				This:C1470.worker.postMessage($params.file)
+				This:C1470.worker.closeInput()
+				
+		End case 
+		
 	End if 
-	
-	This:C1470.controller.execute($commands)
 	
 	If (OB Instance of:C1731(This:C1470.controller; cs:C1710._hpkiUI_Controller))
 		
@@ -150,14 +167,31 @@ Function sign_s($params : Object) : Object
 		$command+=" --pin6 "+This:C1470.escape($params.pin6)
 	End if 
 	
-	If ($params.reader#Null:C1517) && (Value type:C1509($params.reader)=Is text:K8:3)\
-		 && ($params.file#Null:C1517) && (OB Instance of:C1731($params.file; 4D:C1709.File)) && ($params.file.exists)
-		$command+=" --reader "+This:C1470.escape($params.reader)
-		$command+=" "+This:C1470.escape(This:C1470._path($params.file))
-		$commands.push($command)
+	If ($params.reader#Null:C1517) && (Value type:C1509($params.reader)=Is text:K8:3)
+		
+		Case of 
+			: (Value type:C1509($params.file)=Is object:K8:27) && ($params.file#Null:C1517) && (OB Instance of:C1731($params.file; 4D:C1709.File)) && ($params.file.exists)
+				
+				$command+=" --reader "+This:C1470.escape($params.reader)
+				$command+=" "+This:C1470.escape(This:C1470._path($params.file))
+				$commands.push($command)
+				
+				This:C1470.controller.execute($commands)
+				
+			: ((Value type:C1509($params.file)=Is text:K8:3) && ($params.file#"")) || \
+				((Value type:C1509($params.file)=Is BLOB:K8:12) && (BLOB size:C605($params.file#0))) || \
+				((Value type:C1509($params.file)=Is object:K8:27) && ($params.file.length#0))
+				
+				$command+=" --reader "+This:C1470.escape($params.reader)
+				$commands.push($command)
+				
+				This:C1470.controller.execute($commands)
+				This:C1470.worker.postMessage($params.file)
+				This:C1470.worker.closeInput()
+				
+		End case 
+		
 	End if 
-	
-	This:C1470.controller.execute($commands)
 	
 	If (OB Instance of:C1731(This:C1470.controller; cs:C1710._hpkiUI_Controller))
 		

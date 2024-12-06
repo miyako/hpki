@@ -22,7 +22,12 @@
 			"title": ":xliff:CommonMenuFile",
 			"items": [
 				{
-					"title": "テスト…",
+					"title": "マイナンバーカード…",
+					"method": "TEST_jpki",
+					"startNewProcess": true
+				},
+				{
+					"title": "医師会カード…",
 					"method": "TEST_hpki"
 				},
 				{

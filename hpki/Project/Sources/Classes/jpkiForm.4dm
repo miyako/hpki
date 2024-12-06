@@ -4,15 +4,15 @@ Class constructor
 	
 	Super:C1705()
 	
-	$window:=Open form window:C675("hpki")
-	DIALOG:C40("hpki"; This:C1470; *)
+	$window:=Open form window:C675("jpki")
+	DIALOG:C40("jpki"; This:C1470; *)
 	
 Function onLoad()
 	
 	Super:C1706.onLoad()
 	
 	Form:C1466.data:=""
-	Form:C1466.医師会カード:=True:C214
+	Form:C1466.医師会カード:=False:C215
 	
 Function getData() : Text
 	

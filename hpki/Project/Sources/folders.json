@@ -15,7 +15,7 @@
 	"Form": {
 		"classes": [
 			"_Form",
-			"hpkiForm"
+			"pkiForm"
 		]
 	},
 	"trash": {}

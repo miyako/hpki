@@ -13,7 +13,7 @@
 		"onLoad",
 		"onUnload"
 	],
-	"windowTitle": "医師会カード",
+	"windowTitle": "",
 	"destination": "detailScreen",
 	"pages": [
 		{
@@ -21,6 +21,25 @@
 		},
 		{
 			"objects": {
+				"Form.sourceIcon": {
+					"type": "input",
+					"left": 14,
+					"top": 289,
+					"width": 100,
+					"height": 100,
+					"dataSource": "Form:C1466.sourceIcon",
+					"contextMenu": "none",
+					"events": [
+						"onDrop"
+					],
+					"dropping": "custom",
+					"dragging": "none",
+					"method": "ObjectMethods/Form.sourceIcon.4dm",
+					"dataSourceTypeHint": "picture",
+					"pictureFormat": "proportionalCenter",
+					"hideFocusRing": true,
+					"borderStyle": "none"
+				},
 				"readers": {
 					"type": "dropdown",
 					"left": 11,
@@ -36,7 +55,7 @@
 				"cardType": {
 					"type": "input",
 					"left": 107,
-					"top": 150,
+					"top": 90,
 					"width": 137,
 					"height": 17,
 					"dataSource": "Form:C1466.cardType",
@@ -45,21 +64,156 @@
 				"path:1": {
 					"type": "text",
 					"text": "カード種別:",
-					"top": 150,
+					"top": 90,
 					"left": 8,
 					"width": 86,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
+				},
+				"マイナンバーカード": {
+					"type": "button",
+					"text": "マイナンバーカード",
+					"top": 46,
+					"left": 107,
+					"width": 137,
+					"height": 24,
+					"events": [
+						"onClick"
+					],
+					"method": "ObjectMethods/マイナンバーカード.4dm",
+					"focusable": false,
+					"sizingX": "move",
+					"sizingY": "move"
+				},
+				"myNumber": {
+					"type": "input",
+					"left": 107,
+					"top": 115,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.obscure(Form:C1466.myNumber)",
+					"enterable": false
+				},
+				"path:2": {
+					"type": "text",
+					"text": "マイナンバー:",
+					"top": 115,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"address": {
+					"type": "input",
+					"left": 107,
+					"top": 140,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.address",
+					"enterable": false
+				},
+				"path:3": {
+					"type": "text",
+					"text": "住所:",
+					"top": 140,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"commonName": {
+					"type": "input",
+					"left": 107,
+					"top": 165,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.commonName",
+					"enterable": false
+				},
+				"path:4": {
+					"type": "text",
+					"text": "名前:",
+					"top": 165,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"dateOfBirth": {
+					"type": "input",
+					"left": 107,
+					"top": 190,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.dateOfBirth",
+					"enterable": false
+				},
+				"path:5": {
+					"type": "text",
+					"text": "生年月日:",
+					"top": 190,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"gender": {
+					"type": "input",
+					"left": 107,
+					"top": 215,
+					"width": 137,
+					"height": 17,
+					"dataSource": "Form:C1466.gender",
+					"enterable": false
+				},
+				"path:6": {
+					"type": "text",
+					"text": "性別:",
+					"top": 215,
+					"left": 8,
+					"width": 86,
+					"height": 16,
+					"textAlign": "right",
+					"fontWeight": "bold",
+					"sizingY": "move",
+					"sizingX": "fixed"
+				},
+				"Check Box": {
+					"type": "checkbox",
+					"text": "Folder(fk home folder).file(\"pin4\").exists",
+					"top": 392,
+					"left": 275,
+					"width": 251,
+					"height": 32,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"enterable": false,
+					"focusable": false,
+					"dataSource": "Form:C1466.pin4File.exists"
 				},
 				"認証用証明書": {
 					"type": "button",
 					"text": "認証用証明書",
-					"top": 106,
-					"left": 334,
-					"width": 130,
+					"top": 46,
+					"left": 547,
+					"width": 110,
 					"height": 24,
 					"events": [
 						"onClick"
@@ -67,14 +221,29 @@
 					"method": "ObjectMethods/認証用証明書.4dm",
 					"focusable": false,
 					"sizingX": "move",
-					"sizingY": "fixed"
+					"sizingY": "move"
+				},
+				"Check Box1": {
+					"type": "checkbox",
+					"text": "Folder(fk home folder).file(\"pin6\").exists",
+					"top": 392,
+					"left": 533,
+					"width": 251,
+					"height": 32,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"enterable": false,
+					"focusable": false,
+					"dataSource": "Form:C1466.pin6File.exists"
 				},
 				"署名用証明書": {
 					"type": "button",
 					"text": "署名用証明書",
-					"top": 106,
-					"left": 474,
-					"width": 130,
+					"top": 46,
+					"left": 674,
+					"width": 110,
 					"height": 24,
 					"events": [
 						"onClick"
@@ -82,12 +251,12 @@
 					"method": "ObjectMethods/署名用証明書.4dm",
 					"focusable": false,
 					"sizingX": "move",
-					"sizingY": "fixed"
+					"sizingY": "move"
 				},
 				"pem": {
 					"type": "input",
-					"left": 367,
-					"top": 150,
+					"left": 547,
+					"top": 90,
 					"width": 237,
 					"height": 37,
 					"dataSource": "Form:C1466.pem",
@@ -97,19 +266,19 @@
 				"path:7": {
 					"type": "text",
 					"text": "証明書PEM形式:",
-					"top": 150,
-					"left": 248,
-					"width": 106,
+					"top": 90,
+					"left": 408,
+					"width": 126,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"der": {
 					"type": "input",
-					"left": 367,
-					"top": 195,
+					"left": 547,
+					"top": 135,
 					"width": 237,
 					"height": 37,
 					"dataSource": "Form:C1466.der",
@@ -119,19 +288,19 @@
 				"path:8": {
 					"type": "text",
 					"text": "証明書DER形式:",
-					"top": 195,
-					"left": 248,
+					"top": 135,
+					"left": 428,
 					"width": 106,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"serialNumber": {
 					"type": "input",
-					"left": 367,
-					"top": 240,
+					"left": 547,
+					"top": 180,
 					"width": 237,
 					"height": 17,
 					"dataSource": "Form:C1466.serialNumber",
@@ -141,19 +310,19 @@
 				"path:9": {
 					"type": "text",
 					"text": "番号:",
-					"top": 240,
-					"left": 248,
+					"top": 180,
+					"left": 428,
 					"width": 106,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"issuer": {
 					"type": "input",
-					"left": 367,
-					"top": 265,
+					"left": 547,
+					"top": 205,
 					"width": 237,
 					"height": 17,
 					"dataSource": "Form:C1466.issuer",
@@ -163,19 +332,19 @@
 				"path:10": {
 					"type": "text",
 					"text": "発行者:",
-					"top": 265,
-					"left": 248,
+					"top": 205,
+					"left": 428,
 					"width": 106,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"subject": {
 					"type": "input",
-					"left": 367,
-					"top": 290,
+					"left": 547,
+					"top": 230,
 					"width": 237,
 					"height": 17,
 					"dataSource": "Form:C1466.subject",
@@ -185,19 +354,19 @@
 				"path:11": {
 					"type": "text",
 					"text": "サブジェクト:",
-					"top": 290,
-					"left": 248,
+					"top": 230,
+					"left": 428,
 					"width": 106,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"notBefore": {
 					"type": "input",
-					"left": 367,
-					"top": 315,
+					"left": 547,
+					"top": 255,
 					"width": 237,
 					"height": 17,
 					"dataSource": "Form:C1466.notBefore",
@@ -207,19 +376,19 @@
 				"path:12": {
 					"type": "text",
 					"text": "いつから:",
-					"top": 315,
-					"left": 248,
+					"top": 255,
+					"left": 428,
 					"width": 106,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"notAfter": {
 					"type": "input",
-					"left": 367,
-					"top": 340,
+					"left": 547,
+					"top": 280,
 					"width": 237,
 					"height": 17,
 					"dataSource": "Form:C1466.notAfter",
@@ -229,21 +398,21 @@
 				"path:13": {
 					"type": "text",
 					"text": "いつまで:",
-					"top": 340,
-					"left": 248,
+					"top": 280,
+					"left": 428,
 					"width": 106,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"認証用証明書で署名": {
 					"type": "button",
 					"text": "認証用証明書で署名",
-					"top": 392,
-					"left": 334,
-					"width": 130,
+					"top": 252,
+					"left": 14,
+					"width": 150,
 					"height": 24,
 					"events": [
 						"onClick"
@@ -251,14 +420,14 @@
 					"method": "ObjectMethods/認証用証明書で署名.4dm",
 					"focusable": false,
 					"sizingX": "move",
-					"sizingY": "fixed"
+					"sizingY": "move"
 				},
 				"署名用証明書で署名": {
 					"type": "button",
 					"text": "署名用証明書で署名",
-					"top": 392,
-					"left": 474,
-					"width": 130,
+					"top": 252,
+					"left": 181,
+					"width": 150,
 					"height": 24,
 					"events": [
 						"onClick"
@@ -266,13 +435,13 @@
 					"method": "ObjectMethods/署名用証明書で署名.4dm",
 					"focusable": false,
 					"sizingX": "move",
-					"sizingY": "fixed"
+					"sizingY": "move"
 				},
 				"digestInfo": {
 					"type": "input",
-					"left": 467,
-					"top": 427,
-					"width": 137,
+					"left": 267,
+					"top": 307,
+					"width": 237,
 					"height": 37,
 					"dataSource": "Form:C1466.digestInfo",
 					"enterable": false,
@@ -281,98 +450,43 @@
 				"path:14": {
 					"type": "text",
 					"text": "署名ハッシュ:",
-					"top": 427,
-					"left": 368,
-					"width": 86,
+					"top": 307,
+					"left": 128,
+					"width": 126,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"signature": {
 					"type": "input",
-					"left": 467,
-					"top": 472,
-					"width": 137,
+					"left": 267,
+					"top": 352,
+					"width": 237,
 					"height": 37,
 					"dataSource": "Form:C1466.signature",
 					"enterable": false,
-					"sizingX": "grow",
-					"sizingY": "grow"
+					"sizingX": "grow"
 				},
 				"path:15": {
 					"type": "text",
 					"text": "署名:",
-					"top": 472,
-					"left": 388,
-					"width": 66,
+					"top": 352,
+					"left": 148,
+					"width": 106,
 					"height": 16,
 					"textAlign": "right",
 					"fontWeight": "bold",
-					"sizingY": "fixed",
-					"sizingX": "fixed"
-				},
-				"Text": {
-					"type": "text",
-					"text": "パスコードの場所:",
-					"top": 54,
-					"left": 14,
-					"width": 101,
-					"height": 16,
-					"fontWeight": "bold",
-					"textAlign": "right"
-				},
-				"Line": {
-					"type": "line",
-					"top": 90,
-					"left": 14,
-					"width": 590,
-					"height": 0,
-					"stroke": "automatic",
-					"startPoint": "topLeft",
-					"sizingX": "grow"
-				},
-				"Line1": {
-					"type": "line",
-					"top": 370,
-					"left": 14,
-					"width": 590,
-					"height": 0,
-					"stroke": "automatic",
-					"startPoint": "topLeft",
-					"sizingX": "grow"
-				},
-				"data": {
-					"type": "input",
-					"left": 107,
-					"top": 387,
-					"width": 203,
-					"height": 121,
-					"dataSource": "Form:C1466.data",
-					"events": [
-						"onAfterEdit"
-					],
-					"method": "ObjectMethods/data.4dm"
-				},
-				"path:16": {
-					"type": "text",
-					"text": "データ:",
-					"top": 385,
-					"left": 8,
-					"width": 86,
-					"height": 16,
-					"textAlign": "right",
-					"fontWeight": "bold",
-					"sizingY": "fixed",
+					"sizingY": "move",
 					"sizingX": "fixed"
 				},
 				"Check Box2": {
 					"type": "checkbox",
-					"text": "Folder(fk home folder).file(\"hpki\")",
-					"top": 46,
-					"left": 128,
-					"width": 231,
+					"text": "Folder(fk home folder).file(\"hpki\").exists",
+					"top": 392,
+					"left": 15,
+					"width": 251,
 					"height": 32,
 					"events": [
 						"onClick"
@@ -381,6 +495,19 @@
 					"enterable": false,
 					"focusable": false,
 					"dataSource": "Form:C1466.hpkiFile.exists"
+				},
+				"Check Box3": {
+					"type": "checkbox",
+					"text": "医師会カード",
+					"top": 46,
+					"left": 275,
+					"width": 142,
+					"height": 24,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.医師会カード"
 				}
 			}
 		},
@@ -438,7 +565,7 @@
 		}
 	],
 	"method": "method.4dm",
-	"geometryStamp": 1595,
+	"geometryStamp": 1236,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
