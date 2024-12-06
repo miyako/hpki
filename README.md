@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/github/license/miyako/4d-class-hpki)](LICENSE)
 ![downloads](https://img.shields.io/github/downloads/miyako/4d-class-hpki/total)
 
-# `hpki`
+# hpki
 
 マイナンバーカードまたは日本医師会認証局のICカードを使用するためのツール
 
@@ -21,6 +21,8 @@
 ```
 
 <img src="https://github.com/user-attachments/assets/ba8c3d25-a2c6-43f0-ad40-ead147cec963" width=600 height=auto />
+
+<img src="https://github.com/user-attachments/assets/cc834fbd-2709-4b33-9f1d-559108c0c371" width=600 height=auto />
 
 ```
 usage: hpki [options...]
