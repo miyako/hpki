@@ -153,6 +153,9 @@ static void _apdu_compute_digital_signature_jpki(dispatch_semaphore_t sem,
         case hash_algorithm_sha512:
             APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
             break;
+        case hash_algorithm_sha384:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x10;
+            break;
         case hash_algorithm_sha1:
             APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
             break;
@@ -202,6 +205,9 @@ static void _apdu_compute_digital_signature_hpki(dispatch_semaphore_t sem,
         case hash_algorithm_sha512:
             APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
             break;
+        case hash_algorithm_sha384:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x10;
+            break;
         case hash_algorithm_sha1:
             APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
             break;
@@ -217,9 +223,15 @@ static void _apdu_compute_digital_signature_hpki(dispatch_semaphore_t sem,
     std::string digestInfo = threadCtx["digestInfo"].asString();
     std::vector<uint8_t>buf(0);
     hex_to_bytes(digestInfo, buf);
+    
+    data[0] = 0x00;//0x80
+    data[1] = 0x2A;//0x2A
+    data[2] = 0x9E;//0x9E
+    data[3] = 0x9A;//0x9A
     data[4] = buf.size();
-        
+    
     memcpy(&data[5], &buf[0], buf.size());
+    
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
                                     length:APDU_size]

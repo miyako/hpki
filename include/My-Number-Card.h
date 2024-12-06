@@ -12,6 +12,7 @@
 typedef enum {
     hash_algorithm_sha1 = 0,
     hash_algorithm_sha256 = 1,
+    hash_algorithm_sha384 = 2,
     hash_algorithm_sha512 = 3
 } hash_algorithm;
 

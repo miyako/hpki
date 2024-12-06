@@ -51,7 +51,7 @@ static void usage(void) {
     fprintf(stderr, "-m, --mynumber: print personal identification number\n");
     fprintf(stderr, "-i, --myinfo: print basic personal information\n");
     fprintf(stderr, "-l, --list: print scard readers\n");
-    fprintf(stderr, "-a, --algorithm: digest info hash algorithm (sha1,sha256,sha512)\n");
+    fprintf(stderr, "-a, --algorithm: digest info hash algorithm (sha1,sha256,sha384,sha512)\n");
     fprintf(stderr, "-v, --version: show version information\n");
 
     exit(1);
@@ -96,6 +96,9 @@ int hpki(int argc, char *argv[]) {
                 }
                 if(type == "sha256"){
                     algorithm = hash_algorithm_sha256;
+                }
+                if(type == "sha384"){
+                    algorithm = hash_algorithm_sha384;
                 }
                 if(type == "sha512"){
                     algorithm = hash_algorithm_sha512;
@@ -216,6 +219,13 @@ int hpki(int argc, char *argv[]) {
                 md = EVP_sha512();
                 DIGEST_INFO_start = 19;
                 sha = SHA512;
+                break;
+            case hash_algorithm_sha384:
+                DIGEST_INFO_size = sizeof(DIGEST_INFO_384);
+                DIGEST_INFO = DIGEST_INFO_384;
+                md = EVP_sha384();
+                DIGEST_INFO_start = 19;
+                sha = SHA384;
                 break;
             default:
                 DIGEST_INFO_size = sizeof(DIGEST_INFO_256);

@@ -844,6 +844,9 @@ static void _apdu_compute_digital_signature_jpki(SCARDHANDLE hCard, const SCARD_
         case hash_algorithm_sha512:
             APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
             break;
+        case hash_algorithm_sha384:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x10;
+            break;
         case hash_algorithm_sha1:
             APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
             break;
@@ -967,6 +970,9 @@ static void _apdu_compute_digital_signature_hpki(SCARDHANDLE hCard, const SCARD_
     switch (algorithm) {
         case hash_algorithm_sha512:
             APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
+            break;
+        case hash_algorithm_sha384:
+            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x10;
             break;
         case hash_algorithm_sha1:
             APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
