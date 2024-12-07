@@ -247,7 +247,6 @@ int hpki(int argc, char *argv[]) {
 
         bytes_to_hex(&digestInfo[0], digestInfo.size(), hex);
 
-        threadCtx["hi"] = "hi";
         threadCtx["digestInfo"] = hex;
         threadCtx["algorithm"] = algorithm;
     }
