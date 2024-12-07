@@ -46,8 +46,6 @@ Function onResponse($worker : 4D:C1709.SystemWorker; $params : Object)
 					
 				End for each 
 				
-				Form:C1466.医師会カード:=Bool:C1537(Form:C1466.cardType="HPKI")
-				
 			Else 
 				Form:C1466.statusCode:=$response.response
 			End if 
