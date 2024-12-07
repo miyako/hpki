@@ -522,8 +522,8 @@
 					"type": "radio",
 					"text": "SHA1",
 					"top": 432,
-					"left": 329,
-					"width": 71,
+					"left": 259,
+					"width": 80,
 					"height": 25,
 					"events": [
 						"onClick"
@@ -537,8 +537,8 @@
 					"type": "radio",
 					"text": "SHA256",
 					"top": 432,
-					"left": 409,
-					"width": 91,
+					"left": 346,
+					"width": 80,
 					"height": 25,
 					"events": [
 						"onClick"
@@ -552,8 +552,8 @@
 					"type": "radio",
 					"text": "SHA512",
 					"top": 432,
-					"left": 509,
-					"width": 91,
+					"left": 520,
+					"width": 80,
 					"height": 25,
 					"events": [
 						"onClick"
@@ -590,6 +590,21 @@
 					"enterable": false,
 					"sizingX": "grow",
 					"sizingY": "grow"
+				},
+				"SHA3": {
+					"type": "radio",
+					"text": "SHA384",
+					"top": 432,
+					"left": 433,
+					"width": 80,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA384",
+					"radioGroup": "SHA",
+					"focusable": false
 				}
 			}
 		},
@@ -647,7 +662,7 @@
 		}
 	],
 	"method": "method.4dm",
-	"geometryStamp": 1678,
+	"geometryStamp": 1739,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",

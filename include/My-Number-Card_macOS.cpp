@@ -199,42 +199,53 @@ static void _apdu_compute_digital_signature_hpki(dispatch_semaphore_t sem,
                                                  TKSmartCard *smartCard,
                                                  Json::Value& threadCtx) {
     
-    hash_algorithm algorithm = (hash_algorithm)threadCtx["algorithm"].asInt();
-    size_t APDU_size;
-    switch (algorithm) {
-        case hash_algorithm_sha512:
-            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
-            break;
-        case hash_algorithm_sha384:
-            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x10;
-            break;
-        case hash_algorithm_sha1:
-            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
-            break;
-        default:
-            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x20;
-            break;
-    }
+    size_t key_length_bits = 2048;
+    size_t key_length = key_length_bits / 8;
+    std::vector<uint8_t>pkcs(key_length);
     
-    std::vector<uint8_t>data(sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
-    memcpy(&data[0],
-           APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI,
-           sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
+    
+    
+    //key length=2048; signature length=256
+    
+    pkcs[0] = 0x00;
+    pkcs[1] = 0x01;
+    
+    //padding string
+    memset(&pkcs[2],
+           0xFF,
+           pkcs.size() - 2);
+
     std::string digestInfo = threadCtx["digestInfo"].asString();
     std::vector<uint8_t>buf(0);
     hex_to_bytes(digestInfo, buf);
     
-    data[0] = 0x00;//0x80
-    data[1] = 0x2A;//0x2A
-    data[2] = 0x9E;//0x9E
-    data[3] = 0x9A;//0x9A
-    data[4] = buf.size();
+    size_t p = pkcs.size() - buf.size();
+    memcpy(&pkcs[p], &buf[0], buf.size());
+    pkcs[p - 1] = 0x00;
     
-    memcpy(&data[5], &buf[0], buf.size());
+    std::vector<uint8_t>data(7 + pkcs.size()+ 2);
+    
+    data[0] = 0x00;
+    data[1] = 0x2A;
+    data[2] = 0x9E;
+    data[3] = 0x9A;
+        
+    data[4] = 0x00;
+    data[5] = key_length >> 8;
+    data[6] = key_length & 0x00FF;
+    
+    memcpy(&data[7], &pkcs[0], pkcs.size());
+    
+    data[data.size()-2] = 0x00;
+    data[data.size()-1] = 0x00;
+    
+    std::string apdu;
+    bytes_to_hex(&data[0], data.size(), apdu);
+    threadCtx["apdu_pkcs"] = apdu;
     
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
-                                    length:APDU_size]
+                                    length:data.size()]
      reply:^(NSData *response, NSError *error) {
         if ((error == nil) && (_is_response_positive(response, threadCtx))) {
             size_t signature_length = [response length] -2;
@@ -714,6 +725,22 @@ static void _read_block_cert_jpki(dispatch_semaphore_t sem,
                         certificate["version"] = (int)version;
                         ASN1_TIME *notBefore = X509_get_notBefore(x509);
                         ASN1_TIME *notAfter = X509_get_notAfter(x509);
+                        
+                        EVP_PKEY *pubkey = X509_get0_pubkey(x509);
+                        if(pubkey) {
+                            const RSA *rsa = EVP_PKEY_get0_RSA(pubkey);
+                            if(rsa) {
+                                BIGNUM *modulus = NULL;
+                                BIGNUM *public_exponent = NULL;
+                                RSA_get0_key(rsa,
+                                             (const BIGNUM **)&modulus,
+                                             (const BIGNUM **)&public_exponent,
+                                             NULL);
+                                if (modulus != NULL) {
+                                    certificate["length"] = BN_num_bits(modulus);
+                                }
+                            }
+                        }
                         
                         std::string textValue;
                         asn_time_to_iso(notBefore, textValue);

@@ -19,6 +19,7 @@ Function onLoad()
 	
 	Form:C1466.SHA1:=False:C215
 	Form:C1466.SHA256:=True:C214
+	Form:C1466.SHA384:=False:C215
 	Form:C1466.SHA512:=False:C215
 	
 	Form:C1466.list()
@@ -31,6 +32,8 @@ Function get algorithm : Text
 			return "sha1"
 		: (Form:C1466.SHA512)
 			return "sha512"
+		: (Form:C1466.SHA384)
+			return "sha384"
 		Else 
 			return "sha256"
 	End case 

@@ -354,51 +354,6 @@
 					"sizingY": "fixed",
 					"sizingX": "fixed"
 				},
-				"SHA1": {
-					"type": "radio",
-					"text": "SHA1",
-					"top": 432,
-					"left": 329,
-					"width": 71,
-					"height": 25,
-					"events": [
-						"onClick"
-					],
-					"dataSourceTypeHint": "boolean",
-					"dataSource": "Form:C1466.SHA1",
-					"radioGroup": "SHA",
-					"focusable": false
-				},
-				"SHA2": {
-					"type": "radio",
-					"text": "SHA256",
-					"top": 432,
-					"left": 409,
-					"width": 91,
-					"height": 25,
-					"events": [
-						"onClick"
-					],
-					"dataSourceTypeHint": "boolean",
-					"dataSource": "Form:C1466.SHA256",
-					"radioGroup": "SHA",
-					"focusable": false
-				},
-				"SHA5": {
-					"type": "radio",
-					"text": "SHA512",
-					"top": 432,
-					"left": 509,
-					"width": 91,
-					"height": 25,
-					"events": [
-						"onClick"
-					],
-					"dataSourceTypeHint": "boolean",
-					"dataSource": "Form:C1466.SHA512",
-					"radioGroup": "SHA",
-					"focusable": false
-				},
 				"digestInfo": {
 					"type": "input",
 					"left": 107,
@@ -455,6 +410,66 @@
 					"enterable": false,
 					"sizingX": "grow",
 					"sizingY": "grow"
+				},
+				"SHA1": {
+					"type": "radio",
+					"text": "SHA1",
+					"top": 432,
+					"left": 259,
+					"width": 80,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA1",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"SHA2": {
+					"type": "radio",
+					"text": "SHA256",
+					"top": 432,
+					"left": 346,
+					"width": 80,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA256",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"SHA5": {
+					"type": "radio",
+					"text": "SHA512",
+					"top": 432,
+					"left": 520,
+					"width": 80,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA512",
+					"radioGroup": "SHA",
+					"focusable": false
+				},
+				"SHA3": {
+					"type": "radio",
+					"text": "SHA384",
+					"top": 432,
+					"left": 433,
+					"width": 80,
+					"height": 25,
+					"events": [
+						"onClick"
+					],
+					"dataSourceTypeHint": "boolean",
+					"dataSource": "Form:C1466.SHA384",
+					"radioGroup": "SHA",
+					"focusable": false
 				}
 			}
 		},
@@ -512,7 +527,7 @@
 		}
 	],
 	"method": "method.4dm",
-	"geometryStamp": 1611,
+	"geometryStamp": 1615,
 	"editor": {
 		"activeView": "View 1",
 		"defaultView": "View 1",
