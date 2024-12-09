@@ -261,24 +261,128 @@ static void _apdu_compute_digital_signature_hpki(dispatch_semaphore_t sem,
     }];
 }
 
-static void _apdu_set_security_environment_hpki(dispatch_semaphore_t sem,
-                                                TKSmartCard *smartCard,
-                                                Json::Value& threadCtx) {
+static void _apdu_verify_app_hpki_compute_digital_signature(dispatch_semaphore_t sem,
+                                                            TKSmartCard *smartCard,
+                                                            Json::Value& threadCtx) {
+    
+    std::string pin = threadCtx["pin4"].asString();
+    
+    std::vector<uint8_t>data(sizeof(APDU_VERIFY_PIN) + pin.length());
+    memcpy(&data[0],
+           APDU_VERIFY_PIN,
+           sizeof(APDU_VERIFY_PIN));
+    data[3] = APDU_VERIFY_PIN_EF_HPKI;
+    data[4] = pin.length();
+    if(pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
+    [smartCard
+     transmitRequest:[NSData dataWithBytes:&data[0]
+                                    length:data.size()]
+     reply:^(NSData *response, NSError *error) {
+        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
+            _apdu_compute_digital_signature_hpki(sem, smartCard, threadCtx);
+        }else{
+            _end_session(sem, smartCard, threadCtx);
+        }
+    }];
+}
+
+static void _apdu_verify_app_hpki_compute_digital_signature_identity(dispatch_semaphore_t sem,
+                                                                     TKSmartCard *smartCard,
+                                                                     Json::Value& threadCtx) {
+    
+    std::string pin = threadCtx["pin4"].asString();
+    
+    std::vector<uint8_t>data(sizeof(APDU_VERIFY_PIN) + pin.length());
+    memcpy(&data[0],
+           APDU_VERIFY_PIN,
+           sizeof(APDU_VERIFY_PIN));
+    data[3] = APDU_VERIFY_PIN_EF_HPKI;
+    data[4] = pin.length();
+    if(pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
+    [smartCard
+     transmitRequest:[NSData dataWithBytes:&data[0]
+                                    length:data.size()]
+     reply:^(NSData *response, NSError *error) {
+        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
+            _apdu_compute_digital_signature_hpki(sem, smartCard, threadCtx);
+        }else{
+            _end_session(sem, smartCard, threadCtx);
+        }
+    }];
+}
+
+static void _apdu_set_security_environment_hpki_identity(dispatch_semaphore_t sem,
+                                                         TKSmartCard *smartCard,
+                                                         Json::Value& threadCtx) {
     
     std::vector<uint8_t>data(sizeof(MANAGE_SECURITY_ENVIRONMENT));
     memcpy(&data[0],
            MANAGE_SECURITY_ENVIRONMENT,
            sizeof(MANAGE_SECURITY_ENVIRONMENT));
 
-    data[5] = 0x84;//normally should be 0x80=tag for algorithm reference
-    data[6] = 0x02;//size
+    data[5] = 0x84;//tag: private key reference
+    data[6] = 0x02;
     data[7] = 0x00;
-
+//    data[8] = 0x0C;
 //    data[8] = 0x01;//6981
 //    data[8] = 0x02;//6981
 //    data[8] = 0x03;//6981
-    data[8] = 0x09;//6982 (Security condition not satisfied.)
-//    data[8] = 0x08;//6982 (Security condition not satisfied.)
+//    data[8] = 0x01;//6982
+//    data[8] = 0x08;//6a82 (Security condition not satisfied.)
+    data[8] = 0x07;//6a82
+//    data[8] = 0x06;//6a82
+//    data[8] = 0x05;//6981
+//    data[8] = 0x04;//6981
+//    data[8] = 0x0A;//6a82
+//    data[8] = 0x0B;//6a82
+//    data[8] = 0x0F;//6981
+//    data[8] = 0x10;//6a82
+//    data[8] = 0x14;//6a82
+//    data[8] = 0x15;//6a82
+//    data[8] = 0x16;//6981
+//    data[8] = 0x17;//6981
+//    data[8] = 0x1A;//6a82
+    
+    std::string mse;
+    bytes_to_hex(&data[0], data.size(), mse);
+    threadCtx["mse"] = mse;
+    
+    [smartCard
+     transmitRequest:[NSData dataWithBytes:&data[0]
+                                    length:data.size()]
+     reply:^(NSData *response, NSError *error) {
+        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
+            _apdu_verify_app_hpki_compute_digital_signature_identity(sem, smartCard, threadCtx);
+        }else{
+            _end_session(sem, smartCard, threadCtx);
+        }
+    }];
+}
+
+static void _apdu_set_security_environment_hpki_signature(dispatch_semaphore_t sem,
+                                                          TKSmartCard *smartCard,
+                                                          Json::Value& threadCtx) {
+    
+    std::vector<uint8_t>data(sizeof(MANAGE_SECURITY_ENVIRONMENT));
+    memcpy(&data[0],
+           MANAGE_SECURITY_ENVIRONMENT,
+           sizeof(MANAGE_SECURITY_ENVIRONMENT));
+
+    data[5] = 0x84;//tag: private key reference
+    data[6] = 0x02;
+    data[7] = 0x00;
+//    data[8] = 0x0C;
+//    data[8] = 0x01;//6981
+//    data[8] = 0x02;//6981
+//    data[8] = 0x03;//6981
+//    data[8] = 0x07;//6a82
+    data[8] = 0x08;//6982 (Security condition not satisfied.)
 //    data[8] = 0x07;//6a82
 //    data[8] = 0x06;//6a82
 //    data[8] = 0x05;//6981
@@ -293,16 +397,63 @@ static void _apdu_set_security_environment_hpki(dispatch_semaphore_t sem,
 //    data[8] = 0x17;//6981
 //    data[8] = 0x1A;//6a82
     
-    std::string tag;
-    bytes_to_hex(&data[0], data.size(), tag);
-    threadCtx["tag"] = tag;
+    std::string mse;
+    bytes_to_hex(&data[0], data.size(), mse);
+    threadCtx["mse"] = mse;
     
     [smartCard
      transmitRequest:[NSData dataWithBytes:&data[0]
                                     length:data.size()]
      reply:^(NSData *response, NSError *error) {
         if ((error == nil) && (_is_response_positive(response, threadCtx))) {
-            _apdu_compute_digital_signature_hpki(sem, smartCard, threadCtx);
+            _apdu_verify_app_hpki_compute_digital_signature
+            /*_apdu_select_hpki_key_signature*/(sem, smartCard, threadCtx);
+        }else{
+            _end_session(sem, smartCard, threadCtx);
+        }
+    }];
+}
+
+static void _apdu_select_hpki_key_identity(dispatch_semaphore_t sem,
+                                           TKSmartCard *smartCard,
+                                           Json::Value& threadCtx) {
+    
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+           APDU_SELECT_EF_UNDER_DF,
+           sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_KEY_EF_HPKI_HI;
+    data[6] = APDU_SELECT_KEY_EF_HPKI_LO;
+    [smartCard
+     transmitRequest:[NSData dataWithBytes:&data[0]
+                                    length:data.size()]
+     reply:^(NSData *response, NSError *error) {
+        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
+            _apdu_set_security_environment_hpki_identity
+            /*_apdu_verify_app_hpki_compute_digital_signature*/(sem, smartCard, threadCtx);
+        }else{
+            _end_session(sem, smartCard, threadCtx);
+        }
+    }];
+}
+
+static void _apdu_select_hpki_key_signature(dispatch_semaphore_t sem,
+                                            TKSmartCard *smartCard,
+                                            Json::Value& threadCtx) {
+    
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+           APDU_SELECT_EF_UNDER_DF,
+           sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_KEY_EF_HPKI_HI;
+    data[6] = APDU_SELECT_KEY_EF_HPKI_LO;
+    [smartCard
+     transmitRequest:[NSData dataWithBytes:&data[0]
+                                    length:data.size()]
+     reply:^(NSData *response, NSError *error) {
+        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
+            _apdu_set_security_environment_hpki_signature
+            /*_apdu_verify_app_hpki_compute_digital_signature*/(sem, smartCard, threadCtx);
         }else{
             _end_session(sem, smartCard, threadCtx);
         }
@@ -532,84 +683,6 @@ static void _apdu_select_app_jpki_compute_digital_signature(dispatch_semaphore_t
 
 #pragma mark HPKI
 
-static void _apdu_select_hpki_key(dispatch_semaphore_t sem,
-                                  TKSmartCard *smartCard,
-                                  Json::Value& threadCtx) {
-    
-    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
-    memcpy(&data[0],
-           APDU_SELECT_EF_UNDER_DF,
-           sizeof(APDU_SELECT_EF_UNDER_DF));
-    data[5] = APDU_SELECT_KEY_EF_HPKI_HI;
-    data[6] = APDU_SELECT_KEY_EF_HPKI_LO;
-    [smartCard
-     transmitRequest:[NSData dataWithBytes:&data[0]
-                                    length:data.size()]
-     reply:^(NSData *response, NSError *error) {
-        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
-            _apdu_set_security_environment_hpki(sem, smartCard, threadCtx);
-        }else{
-            _end_session(sem, smartCard, threadCtx);
-        }
-    }];
-}
-
-static void _apdu_verify_app_hpki_compute_digital_signature(dispatch_semaphore_t sem,
-                                                            TKSmartCard *smartCard,
-                                                            Json::Value& threadCtx) {
-    
-    std::string pin = threadCtx["pin4"].asString();
-    
-    std::vector<uint8_t>data(sizeof(APDU_VERIFY_PIN) + pin.length());
-    memcpy(&data[0],
-           APDU_VERIFY_PIN,
-           sizeof(APDU_VERIFY_PIN));
-    data[3] = APDU_VERIFY_PIN_EF_HPKI;
-    data[4] = pin.length();
-    if(pin.length()) {
-        memcpy(&data[5], pin.data(), pin.length());
-    }
-
-    [smartCard
-     transmitRequest:[NSData dataWithBytes:&data[0]
-                                    length:data.size()]
-     reply:^(NSData *response, NSError *error) {
-        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
-            _apdu_select_hpki_key(sem, smartCard, threadCtx);
-        }else{
-            _end_session(sem, smartCard, threadCtx);
-        }
-    }];
-}
-
-static void _apdu_verify_app_hpki_compute_digital_signature_identity(dispatch_semaphore_t sem,
-                                                                     TKSmartCard *smartCard,
-                                                                     Json::Value& threadCtx) {
-    
-    std::string pin = threadCtx["pin4"].asString();
-    
-    std::vector<uint8_t>data(sizeof(APDU_VERIFY_PIN) + pin.length());
-    memcpy(&data[0],
-           APDU_VERIFY_PIN,
-           sizeof(APDU_VERIFY_PIN));
-    data[3] = APDU_VERIFY_PIN_EF_HPKI;
-    data[4] = pin.length();
-    if(pin.length()) {
-        memcpy(&data[5], pin.data(), pin.length());
-    }
-
-    [smartCard
-     transmitRequest:[NSData dataWithBytes:&data[0]
-                                    length:data.size()]
-     reply:^(NSData *response, NSError *error) {
-        if ((error == nil) && (_is_response_positive(response, threadCtx))) {
-            _apdu_select_hpki_key(sem, smartCard, threadCtx);
-        }else{
-            _end_session(sem, smartCard, threadCtx);
-        }
-    }];
-}
-
 static void _apdu_select_pin_hpki_compute_digital_signature(dispatch_semaphore_t sem,
                                                             TKSmartCard *smartCard,
                                                             Json::Value& threadCtx) {
@@ -625,7 +698,8 @@ static void _apdu_select_pin_hpki_compute_digital_signature(dispatch_semaphore_t
                                     length:data.size()]
      reply:^(NSData *response, NSError *error) {
         if ((error == nil) && (_is_response_positive(response, threadCtx))) {
-            _apdu_verify_app_hpki_compute_digital_signature(sem, smartCard, threadCtx);
+            _apdu_select_hpki_key_signature
+            /*_apdu_set_security_environment_hpki_signature*/(sem, smartCard, threadCtx);
         }else{
             _end_session(sem, smartCard, threadCtx);
         }
@@ -647,7 +721,8 @@ static void _apdu_select_pin_hpki_compute_digital_signature_identity(dispatch_se
                                     length:data.size()]
      reply:^(NSData *response, NSError *error) {
         if ((error == nil) && (_is_response_positive(response, threadCtx))) {
-            _apdu_verify_app_hpki_compute_digital_signature_identity(sem, smartCard, threadCtx);
+            _apdu_select_hpki_key_identity
+            /*_apdu_set_security_environment_hpki_identity*/(sem, smartCard, threadCtx);
         }else{
             _end_session(sem, smartCard, threadCtx);
         }
@@ -661,7 +736,7 @@ static void _apdu_select_app_hpki_compute_digital_signature(dispatch_semaphore_t
     [smartCard beginSessionWithReply:^(BOOL _success, NSError *error) {
         if (_success) {
             
-            std::string hex = APDU_SELECT_SIGNATURE_AP_HPKI/*APDU_SELECT_IDENTITY_AP_HPKI*/;
+            std::string hex = APDU_SELECT_SIGNATURE_AP_HPKI;
             std::vector<uint8_t>buf(0);
             hex_to_bytes(hex, buf);
             

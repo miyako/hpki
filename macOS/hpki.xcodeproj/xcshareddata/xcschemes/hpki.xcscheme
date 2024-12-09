@@ -52,7 +52,15 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "--sign signature "
+            argument = "--sign "
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "signature"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "identity"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
