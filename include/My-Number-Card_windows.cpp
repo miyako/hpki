@@ -1101,6 +1101,10 @@ static void _apdu_set_security_environment_hpki_identity(SCARDHANDLE hCard, cons
            MANAGE_SECURITY_ENVIRONMENT,
            sizeof(MANAGE_SECURITY_ENVIRONMENT));
 
+    std::string mse;
+    bytes_to_hex(&data[0], data.size(), mse);
+    threadCtx["mse"] = mse;
+    
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
         _apdu_verify_app_hpki_compute_digital_signature_identity(hCard, pioSendPci, threadCtx);
     }
@@ -1126,6 +1130,10 @@ static void _apdu_set_security_environment_hpki_signature(SCARDHANDLE hCard, con
     memcpy(&data[0],
            MANAGE_SECURITY_ENVIRONMENT,
            sizeof(MANAGE_SECURITY_ENVIRONMENT));
+    
+    std::string mse;
+    bytes_to_hex(&data[0], data.size(), mse);
+    threadCtx["mse"] = mse;
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
         _apdu_verify_app_hpki_compute_digital_signature(hCard, pioSendPci, threadCtx);
