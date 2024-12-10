@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments> --pin6 V11SQL --sign signature --reader "VMware Virtual USB CCID 0" C:\Users\miyako\Documents\GitHub\4d-class-hpki\LICENSE</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments> --pin4 9999 --sign signature --reader "SONY FeliCa Port/PaSoRi 4.0 0" C:\Users\miyako\Documents\GitHub\4d-class-hpki\LICENSE</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

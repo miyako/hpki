@@ -80,7 +80,7 @@ return 0;
         int inputIsStream = true;
         int outputIsStream = true;
         hash_algorithm algorithm = hash_algorithm_sha256;
-
+        int cardType = pki_type_unknown;
         while ((opt = getopt_long(argc, argv, OPT_LIST, longopts, &longoptind)) != -1)
         {
             switch (opt)
@@ -120,6 +120,15 @@ return 0;
                 }
                 if (type == "identity") {
                     signWithCertificateIdentity = true;
+                }
+                break;
+            case 't':
+                type = (optarg);
+                if (type == "hpki") {
+                    cardType = pki_type_h;
+                }
+                if (type == "jpki") {
+                    cardType = pki_type_j;
                 }
                 break;
             case 'r':
@@ -289,19 +298,19 @@ return 0;
         threadCtx.removeMember("data");
         threadCtx.removeMember("certificateType");
 
-        if (threadCtx["historicalBytes"].isString()) {
-            std::string historicalBytes = threadCtx["historicalBytes"].asString();
-            if (historicalBytes == ID_HPKI) {
-                threadCtx["cardType"] = NAME_HPKI;
+            if (threadCtx["historicalBytes"].isString()) {
+                std::string historicalBytes = threadCtx["historicalBytes"].asString();
+                if (historicalBytes == ID_HPKI) {
+                    threadCtx["cardType"] = NAME_HPKI;
+                }
+                if (historicalBytes == ID_JPKI) {
+                    threadCtx["cardType"] = NAME_JPKI;
+                }
+                if (historicalBytes == ID_JGID) {
+                    threadCtx["cardType"] = NAME_JPKI;
+                }
+                threadCtx.removeMember("historicalBytes");
             }
-            if (historicalBytes == ID_JPKI) {
-                threadCtx["cardType"] = NAME_JPKI;
-            }
-            if (historicalBytes == ID_JGID) {
-                threadCtx["cardType"] = NAME_JPKI;
-            }
-            threadCtx.removeMember("historicalBytes");
-        }
 
         StreamWriterBuilder builder;
         builder["commentStyle"] = "None";

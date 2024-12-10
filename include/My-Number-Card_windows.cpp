@@ -1023,19 +1023,30 @@ static void _apdu_compute_digital_signature_hpki(SCARDHANDLE hCard, const SCARD_
     if (lResult == SCARD_S_SUCCESS) {
 
         size_t signature_length = cbRecvLength - 2;
-        std::vector<uint8_t>buf(signature_length);
+        
+        if (signature_length > 0) {
+            std::vector<uint8_t>buf(signature_length);
+            memcpy(&buf[0], &pbRecvBuffer[0], signature_length);
+            std::string hex;
+            bytes_to_hex(&buf[0], signature_length, hex);
+            threadCtx["signature"] = hex;
+            std::string b64;
+            bytes_to_b64(&buf[0], signature_length, b64);
+            threadCtx["signature_base64"] = b64;
+            threadCtx["success"] = true;
+        }
+        else {
+            uint8_t SW1 = pbRecvBuffer[0];
+            uint8_t SW2 = pbRecvBuffer[1];
+            std::string hi, lo;
 
-        memcpy(&buf[0], &pbRecvBuffer[0], signature_length);
+            bytes_to_hex(&SW1, sizeof(uint8_t), hi);
+            bytes_to_hex(&SW2, sizeof(uint8_t), lo);
 
-        std::string hex;
-        bytes_to_hex(&buf[0], signature_length, hex);
-        threadCtx["signature"] = hex;
-        std::string b64;
-        bytes_to_b64(&buf[0], signature_length, b64);
-        threadCtx["signature_base64"] = b64;
-        threadCtx["success"] = true;
+            threadCtx["response"] = hi + lo;
+        
+        }
     }
-
 }
 
 static void _apdu_select_hpki_key(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
