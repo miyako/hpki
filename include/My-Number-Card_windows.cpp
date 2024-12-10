@@ -965,32 +965,45 @@ static void _apdu_select_app_jpki_compute_digital_signature_identity(SCARDHANDLE
 
 static void _apdu_compute_digital_signature_hpki(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
-    hash_algorithm algorithm = (hash_algorithm)threadCtx["algorithm"].asInt();
-    size_t APDU_size;
-    switch (algorithm) {
-        case hash_algorithm_sha512:
-            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI);
-            break;
-        case hash_algorithm_sha384:
-            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x10;
-            break;
-        case hash_algorithm_sha1:
-            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x30;
-            break;
-        default:
-            APDU_size = sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI) - 0x20;
-            break;
-    }
+    size_t key_length_bits = 2048;
+    size_t key_length = key_length_bits / 8;
+    std::vector<uint8_t>pkcs(key_length);
+        
+    pkcs[0] = 0x00;
+    pkcs[1] = 0x01;
     
-    std::vector<uint8_t>data(sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
-    memcpy(&data[0],
-        APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI,
-        sizeof(APDU_COMPUTE_DIGITAL_SIGNATURE_KEY_JPKI));
+    //padding string
+    memset(&pkcs[2],
+           0xFF,
+           pkcs.size() - 2);
+
     std::string digestInfo = threadCtx["digestInfo"].asString();
     std::vector<uint8_t>buf(0);
     hex_to_bytes(digestInfo, buf);
-    data[4] = buf.size();
-    memcpy(&data[5], &buf[0], buf.size());
+    
+    size_t p = pkcs.size() - buf.size();
+    memcpy(&pkcs[p], &buf[0], buf.size());
+    pkcs[p - 1] = 0x00;
+    
+    std::vector<uint8_t>data(7 + pkcs.size()+ 2);
+    
+    data[0] = 0x00;
+    data[1] = 0x2A;
+    data[2] = 0x9E;
+    data[3] = 0x9A;
+        
+    data[4] = 0x00;
+    data[5] = key_length >> 8;
+    data[6] = key_length & 0x00FF;
+    
+    memcpy(&data[7], &pkcs[0], pkcs.size());
+    
+    data[data.size()-2] = 0x00;
+    data[data.size()-1] = 0x00;
+    
+    std::string apdu;
+    bytes_to_hex(&data[0], data.size(), apdu);
+    threadCtx["apdu_pkcs"] = apdu;
 
     LPCBYTE pbSendBuffer = &data[0];
     DWORD cbSendLength = APDU_size;
@@ -1054,7 +1067,77 @@ static void _apdu_verify_app_hpki_compute_digital_signature_identity(SCARDHANDLE
     }
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
-        _apdu_select_hpki_key(hCard, pioSendPci, threadCtx);
+        _apdu_compute_digital_signature_hpki(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_hpki_key_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(MANAGE_SECURITY_ENVIRONMENT));
+    memcpy(&data[0],
+           MANAGE_SECURITY_ENVIRONMENT,
+           sizeof(MANAGE_SECURITY_ENVIRONMENT));
+
+    std::string mse;
+    bytes_to_hex(&data[0], data.size(), mse);
+    threadCtx["mse"] = mse;
+    
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_verify_app_hpki_compute_digital_signature_identity(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_hpki_key_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+           APDU_SELECT_EF_UNDER_DF,
+           sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_KEY_EF_HPKI_HI;
+    data[6] = APDU_SELECT_KEY_EF_HPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_set_security_environment_hpki_identity(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_set_security_environment_hpki_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(MANAGE_SECURITY_ENVIRONMENT));
+    memcpy(&data[0],
+           MANAGE_SECURITY_ENVIRONMENT,
+           sizeof(MANAGE_SECURITY_ENVIRONMENT));
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_verify_app_hpki_compute_digital_signature(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_hpki_key_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+           APDU_SELECT_EF_UNDER_DF,
+           sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_KEY_EF_HPKI_HI;
+    data[6] = APDU_SELECT_KEY_EF_HPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_set_security_environment_hpki_signature(hCard, pioSendPci, threadCtx);
+    }
+}
+
+static void _apdu_select_pin_hpki_compute_digital_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
+    memcpy(&data[0],
+           APDU_SELECT_EF_UNDER_DF,
+           sizeof(APDU_SELECT_EF_UNDER_DF));
+    data[5] = APDU_SELECT_PIN_EF_HPKI_HI;
+    data[6] = APDU_SELECT_PIN_EF_HPKI_LO;
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_select_hpki_key_signature(hCard, pioSendPci, threadCtx);
     }
 }
 
@@ -1068,7 +1151,8 @@ static void _apdu_select_pin_hpki_compute_digital_signature_identity(SCARDHANDLE
     data[6] = APDU_SELECT_PIN_EF_HPKI_LO;
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
-        _apdu_verify_app_hpki_compute_digital_signature_identity(hCard, pioSendPci, threadCtx);
+        _apdu_select_hpki_key_identity
+        /*_apdu_verify_app_hpki_compute_digital_signature_identity*/(hCard, pioSendPci, threadCtx);
     }
 }
 
@@ -1171,7 +1255,7 @@ static void _apdu_select_app_hpki_compute_digital_signature(SCARDHANDLE hCard, c
     memcpy(&data[5], &buf[0], buf.size());
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
-        _apdu_select_pin_hpki_compute_digital_signature_identity(hCard, pioSendPci, threadCtx);
+        _apdu_select_pin_hpki_compute_digital_signature(hCard, pioSendPci, threadCtx);
     }
 }
 

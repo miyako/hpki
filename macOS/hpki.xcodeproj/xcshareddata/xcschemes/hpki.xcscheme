@@ -57,11 +57,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "signature"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "identity"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--pin4 9999"
