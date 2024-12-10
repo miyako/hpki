@@ -1071,6 +1071,18 @@ static void _apdu_verify_app_hpki_compute_digital_signature_identity(SCARDHANDLE
     }
 }
 
+static void _apdu_set_security_environment_hpki_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::vector<uint8_t>data(sizeof(MANAGE_SECURITY_ENVIRONMENT));
+    memcpy(&data[0],
+           MANAGE_SECURITY_ENVIRONMENT,
+           sizeof(MANAGE_SECURITY_ENVIRONMENT));
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_verify_app_hpki_compute_digital_signature_identity(hCard, pioSendPci, threadCtx);
+    }
+}
+
 static void _apdu_select_hpki_key_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
     std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
@@ -1135,8 +1147,7 @@ static void _apdu_select_pin_hpki_compute_digital_signature_identity(SCARDHANDLE
     data[6] = APDU_SELECT_PIN_EF_HPKI_LO;
 
     if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
-        _apdu_select_hpki_key_identity
-        /*_apdu_verify_app_hpki_compute_digital_signature_identity*/(hCard, pioSendPci, threadCtx);
+        _apdu_select_hpki_key_identity(hCard, pioSendPci, threadCtx);
     }
 }
 
