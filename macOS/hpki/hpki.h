@@ -13,7 +13,7 @@ int hpki(int argc, char * argv[]);
 
 #define VERSION "1.0.0"
 
-#define OPT_LIST "a:p:P:r:c:s:t:milv"
+#define OPT_LIST "a:p:P:r:c:s:milv"
 
 struct option longopts[] = {
     {"help", no_argument, NULL, '?'},
@@ -24,7 +24,6 @@ struct option longopts[] = {
     {"reader", required_argument, NULL, 'r'},
     {"myinfo", no_argument, NULL, 'i'},
     {"sign", required_argument, NULL, 's'},
-    {"type", required_argument, NULL, 't'},
     {"certificate", required_argument, NULL, 'c'},
     {"mynumber", no_argument, NULL, 'm'},
     {"list", no_argument, NULL, 'l'},
