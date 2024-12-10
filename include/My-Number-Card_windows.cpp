@@ -1073,22 +1073,6 @@ static void _apdu_verify_app_hpki_compute_digital_signature_identity(SCARDHANDLE
 
 static void _apdu_select_hpki_key_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
-    std::vector<uint8_t>data(sizeof(MANAGE_SECURITY_ENVIRONMENT));
-    memcpy(&data[0],
-           MANAGE_SECURITY_ENVIRONMENT,
-           sizeof(MANAGE_SECURITY_ENVIRONMENT));
-
-    std::string mse;
-    bytes_to_hex(&data[0], data.size(), mse);
-    threadCtx["mse"] = mse;
-    
-    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
-        _apdu_verify_app_hpki_compute_digital_signature_identity(hCard, pioSendPci, threadCtx);
-    }
-}
-
-static void _apdu_select_hpki_key_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
-
     std::vector<uint8_t>data(sizeof(APDU_SELECT_EF_UNDER_DF));
     memcpy(&data[0],
            APDU_SELECT_EF_UNDER_DF,
