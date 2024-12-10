@@ -1006,7 +1006,7 @@ static void _apdu_compute_digital_signature_hpki(SCARDHANDLE hCard, const SCARD_
     threadCtx["apdu_pkcs"] = apdu;
 
     LPCBYTE pbSendBuffer = &data[0];
-    DWORD cbSendLength = APDU_size;
+    DWORD cbSendLength = data.size();
     BYTE pbRecvBuffer[258];
     DWORD cbRecvLength = sizeof(pbRecvBuffer);
 
