@@ -684,10 +684,10 @@ static void _apdu_select_app_hpki_compute_digital_signature(dispatch_semaphore_t
     [smartCard beginSessionWithReply:^(BOOL _success, NSError *error) {
         if (_success) {
             
-            std::string hex = APDU_SELECT_IDENTITY_AP_HPKI;//署名用APではない
+            std::string hex = APDU_SELECT_SIGNATURE_AP_HPKI;
             std::vector<uint8_t>buf(0);
             hex_to_bytes(hex, buf);
-            
+
             std::vector<uint8_t>data(sizeof(APDU_SELECT_FILE_DF) + buf.size());
             memcpy(&data[0],
                    APDU_SELECT_FILE_DF,
