@@ -1052,6 +1052,25 @@ static void _apdu_select_hpki_key(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pio
     }
 }
 
+static void _apdu_verify_app_hpki_compute_digital_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
+
+    std::string pin = threadCtx["pin4"].asString();
+
+    std::vector<uint8_t>data(sizeof(APDU_VERIFY_PIN) + pin.length());
+    memcpy(&data[0],
+           APDU_VERIFY_PIN,
+           sizeof(APDU_VERIFY_PIN));
+    data[3] = APDU_VERIFY_PIN_EF_HPKI;
+    data[4] = pin.length();
+    if (pin.length()) {
+        memcpy(&data[5], pin.data(), pin.length());
+    }
+
+    if (_transmit_request(hCard, pioSendPci, data, threadCtx)) {
+        _apdu_compute_digital_signature_hpki(hCard, pioSendPci, threadCtx);
+    }
+}
+
 static void _apdu_verify_app_hpki_compute_digital_signature_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
     std::string pin = threadCtx["pin4"].asString();
