@@ -1184,7 +1184,7 @@ static void _apdu_select_pin_hpki_compute_digital_signature_identity(SCARDHANDLE
 
 static void _apdu_select_app_hpki_compute_digital_signature_identity(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
-    std::string hex = APDU_SELECT_SIGNATURE_AP_HPKI;
+    std::string hex = APDU_SELECT_IDENTITY_AP_HPKI;
     std::vector<uint8_t>buf(0);
     hex_to_bytes(hex, buf);
 
@@ -1268,7 +1268,7 @@ static void _apdu_select_app_jpki_compute_digital_signature(SCARDHANDLE hCard, c
 
 static void _apdu_select_app_hpki_compute_digital_signature(SCARDHANDLE hCard, const SCARD_IO_REQUEST* pioSendPci, Json::Value& threadCtx) {
 
-    std::string hex = APDU_SELECT_IDENTITY_AP_HPKI;
+    std::string hex = APDU_SELECT_SIGNATURE_AP_HPKI;
     std::vector<uint8_t>buf(0);
     hex_to_bytes(hex, buf);
 
