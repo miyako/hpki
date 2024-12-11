@@ -9,6 +9,11 @@
 
 CLIプログラム単体のダウンロードは[こちら](https://github.com/miyako/hpki/releases/tag/bin-1.0.0)
 
+関連CLIプログラム
+
+* [XMLLint](https://github.com/miyako/libxml2/releases/tag/bin-1.0.0)
+* [OpenSSL](https://github.com/miyako/OpenSSL/releases/tag/bin-1.0.0)
+
 ```
 usage: hpki [options...] FILE
 -c, --certificate type: print certificate
