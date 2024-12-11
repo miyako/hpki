@@ -7,6 +7,8 @@
 
 マイナンバーカードまたは日本医師会認証局のICカードを使用するためのツール
 
+CLIプログラム単体のダウンロードは[こちら](https://github.com/miyako/hpki/releases/tag/bin-1.0.0)
+
 ## dependencies.json
 
  ```json
