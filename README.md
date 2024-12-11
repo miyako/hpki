@@ -7,6 +7,28 @@
 
 マイナンバーカードまたは日本医師会認証局のICカードを使用するためのツール
 
+CLIプログラム単体のダウンロードは[こちら](https://github.com/miyako/hpki/releases/tag/bin-1.0.0)
+
+関連CLIプログラム
+
+* [XMLLint](https://github.com/miyako/libxml2/releases/tag/bin-1.0.0)
+* [OpenSSL](https://github.com/miyako/OpenSSL/releases/tag/bin-1.0.0)
+
+```
+usage: hpki [options...] FILE
+-c, --certificate type: print certificate
+-s, --sign type: sign document
+-o, --output path: output file path
+-p, --pin4 val: specify scard short pin
+-P, --pin6 val: specify scard long pin
+-r, --reader val: specify scard reader
+-m, --mynumber: print personal identification number
+-i, --myinfo: print basic personal information
+-l, --list: print scard readers
+-a, --algorithm: digest info hash algorithm (sha1,sha256,sha384,sha512)
+-v, --version: show version information
+```
+
 ## dependencies.json
 
  ```json
@@ -23,20 +45,6 @@
 <img src="https://github.com/user-attachments/assets/ba8c3d25-a2c6-43f0-ad40-ead147cec963" width=600 height=auto />
 
 <img src="https://github.com/user-attachments/assets/cc834fbd-2709-4b33-9f1d-559108c0c371" width=600 height=auto />
-
-```
-usage: hpki [options...]
--c, --certificate type: print certificate
--s, --sign type: sign document
--o, --output path: output file path
--p, --pin4 val: specify scard short pin
--P, --pin6 val: specify scard long pin
--r, --reader val: specify scard reader
--m, --mynumber: print personal identification number
--i, --myinfo: print basic personal information
--l, --list: print scard readers
--v, --version: show version information
-```
 
 ### 認証用証明書を取得する
 
