@@ -10,7 +10,7 @@
 CLIプログラム単体のダウンロードは[こちら](https://github.com/miyako/hpki/releases/tag/bin-1.0.0)
 
 ```
-usage: hpki [options...]
+usage: hpki [options...] FILE
 -c, --certificate type: print certificate
 -s, --sign type: sign document
 -o, --output path: output file path
