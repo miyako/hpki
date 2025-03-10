@@ -17,6 +17,7 @@
 		D13B7D132BD8FF9100344DEF /* My-Number-Card.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D13B7D0F2BD8FF9100344DEF /* My-Number-Card.cpp */; };
 		D13B7D152BD9000700344DEF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D13B7D142BD9000700344DEF /* Security.framework */; };
 		D13B7D172BD9002200344DEF /* CryptoTokenKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D13B7D162BD9002200344DEF /* CryptoTokenKit.framework */; };
+		D1D1A61F2D7F1639000DE356 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D1D1A61E2D7F1632000DE356 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,6 +50,7 @@
 		D13B7D142BD9000700344DEF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		D13B7D162BD9002200344DEF /* CryptoTokenKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoTokenKit.framework; path = System/Library/Frameworks/CryptoTokenKit.framework; sourceTree = SDKROOT; };
 		D13B7D1A2BD9074900344DEF /* hpki.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = hpki.entitlements; sourceTree = "<group>"; };
+		D1D1A61E2D7F1632000DE356 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D13B7D172BD9002200344DEF /* CryptoTokenKit.framework in Frameworks */,
+				D1D1A61F2D7F1639000DE356 /* libz.tbd in Frameworks */,
 				D13B7D152BD9000700344DEF /* Security.framework in Frameworks */,
 				D13B7D022BD8FD9F00344DEF /* libssl.a in Frameworks */,
 				D13B7D032BD8FD9F00344DEF /* libjsoncpp.a in Frameworks */,
@@ -105,6 +108,7 @@
 		D13B7CFE2BD8FD9F00344DEF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D1D1A61E2D7F1632000DE356 /* libz.tbd */,
 				D13B7D162BD9002200344DEF /* CryptoTokenKit.framework */,
 				D13B7D142BD9000700344DEF /* Security.framework */,
 				D13B7D012BD8FD9F00344DEF /* libcrypto.a */,
@@ -320,7 +324,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/a",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.4d.hpki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -342,7 +346,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/a",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.4d.hpki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
