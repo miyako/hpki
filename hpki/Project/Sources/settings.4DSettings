@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="4">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="5">
 	<com.4d>
 		<general component_classStore_name="hpki" startup_environnement="1"/>
 		<interface>
 			<user sdi_application="true"/>
 		</interface>
+		<compiler>
+			<options target="all"/>
+		</compiler>
 	</com.4d>
 </preferences>

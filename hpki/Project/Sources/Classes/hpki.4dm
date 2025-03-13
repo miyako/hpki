@@ -83,6 +83,7 @@ Function sign_i($params : Object) : Object
 	var $commands; $options : Collection
 	$commands:=[]
 	
+	var $command : Text
 	$command:=This:C1470.escape(This:C1470._executablePath)+" --sign identity"
 	
 	If ($params.pin4#Null:C1517) && (Value type:C1509($params.pin4)=Is text:K8:3)
@@ -105,7 +106,7 @@ Function sign_i($params : Object) : Object
 				This:C1470.controller.execute($commands)
 				
 			: ((Value type:C1509($params.file)=Is text:K8:3) && ($params.file#"")) || \
-				((Value type:C1509($params.file)=Is BLOB:K8:12) && (BLOB size:C605($params.file#0))) || \
+				((Value type:C1509($params.file)=Is BLOB:K8:12) && (BLOB size:C605($params.file)#0)) || \
 				((Value type:C1509($params.file)=Is object:K8:27) && ($params.file.length#0))
 				
 				$command+=" --reader "+This:C1470.escape($params.reader)
@@ -187,7 +188,7 @@ Function sign_s($params : Object) : Object
 				This:C1470.controller.execute($commands)
 				
 			: ((Value type:C1509($params.file)=Is text:K8:3) && ($params.file#"")) || \
-				((Value type:C1509($params.file)=Is BLOB:K8:12) && (BLOB size:C605($params.file#0))) || \
+				((Value type:C1509($params.file)=Is BLOB:K8:12) && (BLOB size:C605($params.file)#0)) || \
 				((Value type:C1509($params.file)=Is object:K8:27) && ($params.file.length#0))
 				
 				$command+=" --reader "+This:C1470.escape($params.reader)
@@ -238,7 +239,7 @@ Function sign_s($params : Object) : Object
 		return {success: False:C215}
 	End if 
 	
-Function mynumber($params : Object) : Text
+Function mynumber($params : Object) : Object
 	
 	var $commands; $options : Collection
 	$commands:=[]
