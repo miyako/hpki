@@ -36,7 +36,7 @@ usage: hpki [options...] FILE
     "dependencies": {
         "hpki": {
             "github": "miyako/hpki",
-            "version": "*"
+            "version": "latest"
         }
     }
 }
