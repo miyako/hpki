@@ -6,7 +6,7 @@
   ],
   "license": "MIT",
   "repository": "https://github.com/miyako/hpki",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "tool": {
     "platform": "macos",
     "branch": "20.x",
